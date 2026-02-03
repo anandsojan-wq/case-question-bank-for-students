@@ -10,6 +10,7 @@
         :root {
             --bg-color: #6C5CE7; --card-bg: #FFFFFF; --text-color: #2D3436;
             --primary-btn: #FDCB6E; --primary-shadow: #E1B12C; --input-bg: #F0F3F7;
+            --correct-green: #00b894; --wrong-red: #ff7675;
             --border-radius: 20px;
         }
 
@@ -24,7 +25,7 @@
         }
 
         .container {
-            background: var(--card-bg); padding: 40px; width: 100%; max-width: 420px;
+            background: var(--card-bg); padding: 30px; width: 100%; max-width: 450px;
             border-radius: var(--border-radius); box-shadow: 0 8px 0 rgba(0,0,0,0.15);
             text-align: center; border: 4px solid #000; position: relative; z-index: 10;
         }
@@ -38,8 +39,8 @@
             font-size: 16px; font-family: 'Nunito', sans-serif; font-weight: 700;
             color: #2d3436; margin-bottom: 20px; box-sizing: border-box; outline: none; transition: all 0.2s;
         }
-        input:focus, select:focus { border-color: var(--bg-color); background: #fff; }
-
+        
+        /* 3D Button Style */
         button {
             width: 100%; padding: 15px; background: var(--primary-btn); color: #2d3436;
             border: 3px solid #000; border-radius: 15px; font-size: 20px; font-weight: 900;
@@ -47,25 +48,31 @@
             text-transform: uppercase; margin-top: 10px; transition: all 0.1s;
         }
         button:active { box-shadow: 0 0 0 var(--primary-shadow); transform: translateY(6px); }
-        button:disabled { background-color: #bdc3c7; box-shadow: none; cursor: not-allowed; transform: translateY(6px); border-color: #95a5a6; }
+        button:disabled { background-color: #bdc3c7; box-shadow: none; transform: translateY(6px); border-color: #95a5a6; }
 
         .hidden { display: none !important; }
-        .footer { margin-top: 30px; color: white; font-weight: 700; font-size: 14px; text-shadow: 1px 1px 0px #000; letter-spacing: 1px; opacity: 0.9; }
-        
-        /* Welcome Back Message */
-        .welcome-msg { 
-            background: #e0f7fa; padding: 15px; border-radius: 15px; border: 3px solid #00cec9; 
-            color: #00838f; font-weight: 800; margin-bottom: 25px; 
-        }
-        .logout-link { display: block; margin-top: 5px; color: #d63031; font-size: 12px; cursor: pointer; text-decoration: underline; }
+        .footer { margin-top: 30px; color: white; font-weight: 700; font-size: 14px; text-shadow: 1px 1px 0px #000; opacity: 0.9; }
 
-        /* Divider */
-        .section-divider { 
-            border-top: 3px dashed #dfe6e9; margin: 20px 0; position: relative; 
+        /* QUIZ STYLES */
+        .quiz-score { font-size: 14px; color: #636e72; font-weight: 800; margin-bottom: 20px; text-align: right; }
+        .question-text { font-size: 22px; font-weight: 800; line-height: 1.4; margin-bottom: 25px; text-align: left; }
+        
+        .option-btn {
+            background: #fff; border: 3px solid #dfe6e9; color: #2d3436;
+            margin-bottom: 15px; text-align: left; font-size: 18px;
+            box-shadow: 0 4px 0 #b2bec3; /* Smaller shadow for options */
         }
-        .section-title {
-            background: #fff; padding: 0 10px; color: #b2bec3; font-weight: 800; font-size: 12px;
-            position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+        .option-btn:hover { background: #f1f2f6; }
+        
+        /* Feedback Colors */
+        .correct-answer { background: var(--correct-green) !important; border-color: #000 !important; color: white !important; box-shadow: 0 4px 0 #006266 !important; }
+        .wrong-answer { background: var(--wrong-red) !important; border-color: #000 !important; color: white !important; box-shadow: 0 4px 0 #c0392b !important; }
+
+        /* Result Screen */
+        .result-circle {
+            width: 120px; height: 120px; background: #ffeaa7; border-radius: 50%; border: 4px solid #000;
+            display: flex; justify-content: center; align-items: center; margin: 0 auto 20px auto;
+            font-size: 40px; font-weight: 900; color: #2d3436;
         }
     </style>
 </head>
@@ -77,35 +84,26 @@
         <h2>🚀 CBSE QUESTION BANK</h2>
         
         <div id="welcome-section" class="hidden">
-            <div class="welcome-msg">
-                Welcome back,<br><span style="font-size: 22px; color: #000;">👋 <span id="display-name">Student</span></span>
-                <span class="logout-link" onclick="logout()">(Not you? Change User)</span>
+            <div style="background: #e0f7fa; padding: 15px; border-radius: 15px; border: 3px solid #00cec9; margin-bottom: 20px;">
+                Welcome back,<br><span style="font-size: 22px; font-weight:900;">👋 <span id="display-name">Student</span></span>
+                <span style="display:block; margin-top:5px; font-size:12px; text-decoration:underline; cursor:pointer;" onclick="logout()">(Not you? Change User)</span>
             </div>
         </div>
 
         <div id="personal-details">
-            <label>Full Name</label>
-            <input type="text" id="student-name" placeholder="Your Name">
-
-            <label>Phone Number</label>
-            <input type="tel" id="student-phone" placeholder="9876543210" maxlength="10">
-
-            <label>School Name</label>
-            <input type="text" id="student-school" placeholder="Your School Name">
+            <label>Full Name</label> <input type="text" id="student-name" placeholder="Your Name">
+            <label>Phone Number</label> <input type="tel" id="student-phone" placeholder="9876543210" maxlength="10">
+            <label>School Name</label> <input type="text" id="student-school" placeholder="Your School Name">
         </div>
 
-        <div class="section-divider">
-            <span class="section-title">CHOOSE YOUR QUIZ</span>
+        <div style="border-top: 3px dashed #dfe6e9; margin: 20px 0; position: relative;">
+            <span style="background: #fff; padding: 0 10px; color: #b2bec3; font-weight: 800; font-size: 12px; position: absolute; top: -10px; left: 50%; transform: translateX(-50%);">CHOOSE YOUR QUIZ</span>
         </div>
 
         <label>Class</label>
-        <select id="class-select">
+        <select id="class-select" onchange="updateSubjects()">
             <option value="">-- Pick your level --</option>
-            <option value="6">Class 6</option>
-            <option value="7">Class 7</option>
-            <option value="8">Class 8</option>
-            <option value="9">Class 9</option>
-            <option value="10">Class 10</option>
+            <option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option>
         </select>
 
         <label>Subject</label>
@@ -116,10 +114,22 @@
         <button id="start-btn" onclick="startApp()">LET'S GO! ▶</button>
     </div>
 
-    <div id="quiz-screen" class="hidden">
-        <h2 id="quiz-header">Quiz Time!</h2>
-        <h3 id="loading-msg">Connecting to database...</h3>
-        <button onclick="location.reload()" style="background:#ff7675; box-shadow: 0 6px 0 #d63031;">Quit Game ✖</button>
+    <div id="loading-screen" class="hidden">
+        <h2>⏳ Connecting...</h2>
+        <p>Fetching your questions...</p>
+    </div>
+
+    <div id="game-screen" class="hidden">
+        <div class="quiz-score">Question: <span id="q-number">1</span> / <span id="q-total">20</span></div>
+        <div id="question-text" class="question-text">Question goes here?</div>
+        <div id="options-area"></div> <button id="next-btn" class="hidden" onclick="nextQuestion()">NEXT QUESTION ➡</button>
+    </div>
+
+    <div id="result-screen" class="hidden">
+        <h2>🏆 QUIZ COMPLETE!</h2>
+        <div class="result-circle" id="final-score">0%</div>
+        <p>You got <span id="score-count">0</span> correct answers.</p>
+        <button onclick="location.reload()">PLAY AGAIN 🔄</button>
     </div>
 
 </div>
@@ -127,139 +137,168 @@
 <div class="footer">Developed by ICM Educations</div>
 
 <script>
-    // --- 1. CONFIGURATION ---
-    const scriptURL = "https://script.google.com/macros/s/AKfycbwyGIFH_QN1tyMlFxsEeU7VdVeVYG5FVfACJe1dM8FDT9SxHEun1eiprts41rEZSvNE4w/exec"; 
+    // 🔴 1. THIS IS YOUR NEW URL 🔴
+    const scriptURL = "https://script.google.com/macros/s/AKfycbwXeFBp7ZOQ73n-RyxR2DeLTn_DbVVmEN-o62VRplViJcA9peUWie0o5PxuuN3JWwj2xQ/exec"; 
 
-    // Variables to hold user data
-    let savedName = "";
-    let savedPhone = "";
-    let savedSchool = "";
-
-    // --- 2. ON LOAD & PHONE VALIDATION ---
+    // --- VARIABLES ---
+    let currentQuestions = [];
+    let currentQuestionIndex = 0;
+    let score = 0;
+    
+    // --- ON LOAD ---
     window.onload = function() {
-        // A. Reset Dropdowns
         document.getElementById("class-select").value = "";
-        document.getElementById("subject-select").innerHTML = '<option value="">-- Pick a class first --</option>';
-        document.getElementById("subject-select").disabled = true;
-
-        // B. Check for Returning User
+        
         if(localStorage.getItem("studentName")) {
-            savedName = localStorage.getItem("studentName");
-            savedPhone = localStorage.getItem("studentPhone");
-            savedSchool = localStorage.getItem("studentSchool");
-
-            // Hide Form, Show Welcome
             document.getElementById("personal-details").classList.add("hidden");
             document.getElementById("welcome-section").classList.remove("hidden");
-            document.getElementById("display-name").innerText = savedName;
+            document.getElementById("display-name").innerText = localStorage.getItem("studentName");
         }
-
-        // C. Setup Phone Number Input Protection (Only Numbers allowed)
-        const phoneInput = document.getElementById('student-phone');
-        if(phoneInput) {
-            phoneInput.addEventListener('input', function (e) {
-                // Remove any non-number character immediately
-                this.value = this.value.replace(/[^0-9]/g, '');
-            });
-        }
+        
+        // Phone protection
+        document.getElementById('student-phone').addEventListener('input', function (e) {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
     };
 
-    function logout() {
-        localStorage.clear(); // Wipe memory
-        location.reload();    // Refresh page
+    function logout() { localStorage.clear(); location.reload(); }
+
+    // --- DROPDOWN LOGIC ---
+    function updateSubjects() {
+        const sel = document.getElementById("class-select").value;
+        const sub = document.getElementById("subject-select");
+        sub.innerHTML = '<option value="">-- Pick a subject --</option>';
+        if(sel) {
+            sub.disabled = false;
+            ["Mathematics", "Science", "Social Science"].forEach(s => {
+                let opt = document.createElement("option"); opt.value = s; opt.innerText = s; sub.appendChild(opt);
+            });
+        } else { sub.disabled = true; }
     }
 
-    // --- 3. DROPDOWN LOGIC ---
-    const classSelect = document.getElementById("class-select");
-    const subjectSelect = document.getElementById("subject-select");
-    
-    classSelect.addEventListener("change", function() {
-        const selectedClass = classSelect.value;
-        subjectSelect.innerHTML = '<option value="">-- Pick a subject --</option>';
-        
-        if (selectedClass) {
-            subjectSelect.disabled = false;
-            const subjects = ["Mathematics", "Science", "Social Science"];
-            subjects.forEach(sub => {
-                let option = document.createElement("option");
-                option.value = sub;
-                option.innerText = sub;
-                subjectSelect.appendChild(option);
-            });
-        } else {
-            subjectSelect.disabled = true;
-            subjectSelect.innerHTML = '<option value="">-- Pick a class first --</option>';
-        }
-    });
-
-    // --- 4. START APP ---
+    // --- START APP & FETCH QUESTIONS ---
     function startApp() {
-        const cls = document.getElementById("class-select").value;
-        const sub = document.getElementById("subject-select").value;
-        const btn = document.getElementById("start-btn");
+        // 1. Gather Data
+        let name = localStorage.getItem("studentName") || document.getElementById("student-name").value.trim();
+        let phone = localStorage.getItem("studentPhone") || document.getElementById("student-phone").value.trim();
+        let school = localStorage.getItem("studentSchool") || document.getElementById("student-school").value.trim();
+        let cls = document.getElementById("class-select").value;
+        let sub = document.getElementById("subject-select").value;
 
-        let finalName, finalPhone, finalSchool;
+        // 2. Validate
+        if(!name || !phone || !school || !cls || !sub) { alert("⚠️ Please fill all details!"); return; }
+        if(phone.length !== 10) { alert("⚠️ Phone must be 10 digits!"); return; }
 
-        // If returning user, use saved data. If new, use input data.
-        if (savedName !== "") {
-            finalName = savedName;
-            finalPhone = savedPhone;
-            finalSchool = savedSchool;
-        } else {
-            finalName = document.getElementById("student-name").value.trim();
-            finalPhone = document.getElementById("student-phone").value.trim();
-            finalSchool = document.getElementById("student-school").value.trim();
-        }
+        // 3. Save & Show Loading
+        localStorage.setItem("studentName", name);
+        localStorage.setItem("studentPhone", phone);
+        localStorage.setItem("studentSchool", school);
 
-        // --- VALIDATION SECTION ---
-        
-        // 1. Check if empty
-        if(finalName === "" || finalPhone === "" || finalSchool === "" || cls === "" || sub === "") {
-            alert("⚠️ Please complete all details!"); 
-            return;
-        }
+        document.getElementById("login-screen").classList.add("hidden");
+        document.getElementById("loading-screen").classList.remove("hidden");
 
-        // 2. CHECK: Phone Number Length (Must be exactly 10)
-        if (finalPhone.length !== 10) {
-            alert("⚠️ Invalid Phone Number! It must be exactly 10 digits.");
-            return; // Stops the code here
-        }
-
-        // ---------------------------
-
-        // SAVE TO MEMORY (For next time)
-        localStorage.setItem("studentName", finalName);
-        localStorage.setItem("studentPhone", finalPhone);
-        localStorage.setItem("studentSchool", finalSchool);
-
-        // LOCK & SEND
-        btn.innerText = "SAVING...";
-        btn.disabled = true;
-
-        const data = { 
-            name: finalName, 
-            phone: finalPhone, 
-            school: finalSchool,
-            studentClass: cls
-        };
-
+        // 4. SAVE LOGIN (Post)
         fetch(scriptURL, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-        })
-        .then(response => {
-            document.getElementById("login-screen").classList.add("hidden");
-            document.getElementById("quiz-screen").classList.remove("hidden");
-            document.getElementById("quiz-header").innerText = `Hi, ${finalName}!`;
-            document.getElementById("loading-msg").innerText = `Success! Starting ${sub} for Class ${cls}...`;
-        })
-        .catch(error => {
-            alert("Error! Check internet.");
-            btn.disabled = false;
-            btn.innerText = "LET'S GO! ▶";
+            method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: name, phone: phone, school: school, studentClass: cls })
         });
+
+        // 5. FETCH QUESTIONS (Get) - The "Randomizer" Logic
+        const fetchUrl = `${scriptURL}?studentClass=${cls}&subject=${sub}`;
+        
+        fetch(fetchUrl)
+        .then(res => res.json())
+        .then(data => {
+            if(data.length === 0) {
+                alert("⚠️ No questions found for this subject yet! Please check back later.");
+                location.reload();
+                return;
+            }
+
+            // A. SHUFFLE THE QUESTIONS (Fisher-Yates Algorithm)
+            for (let i = data.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [data[i], data[j]] = [data[j], data[i]];
+            }
+
+            // B. Pick first 20 (or less if not enough questions)
+            currentQuestions = data.slice(0, 20);
+            
+            // C. Start Quiz
+            document.getElementById("loading-screen").classList.add("hidden");
+            document.getElementById("game-screen").classList.remove("hidden");
+            loadQuestion();
+        })
+        .catch(err => {
+            console.error(err);
+            alert("Error fetching questions! Check your URL or Internet.");
+            location.reload();
+        });
+    }
+
+    // --- QUIZ GAME LOGIC ---
+    function loadQuestion() {
+        let q = currentQuestions[currentQuestionIndex];
+        
+        // Update Header
+        document.getElementById("q-number").innerText = currentQuestionIndex + 1;
+        document.getElementById("q-total").innerText = currentQuestions.length;
+        document.getElementById("question-text").innerText = q.q;
+        document.getElementById("next-btn").classList.add("hidden"); // Hide Next button
+
+        // Create Buttons
+        const area = document.getElementById("options-area");
+        area.innerHTML = ""; // Clear old buttons
+        
+        let options = [q.a, q.b, q.c, q.d];
+        
+        options.forEach(opt => {
+            let btn = document.createElement("button");
+            btn.className = "option-btn"; // Use specific class, not generic button
+            btn.innerText = opt;
+            btn.onclick = () => checkAnswer(btn, opt, q.correct);
+            area.appendChild(btn);
+        });
+    }
+
+    function checkAnswer(selectedBtn, selectedValue, correctValue) {
+        // Disable all buttons so they can't click twice
+        let allBtns = document.querySelectorAll(".option-btn");
+        allBtns.forEach(btn => btn.disabled = true);
+
+        if(selectedValue === correctValue) {
+            // CORRECT
+            selectedBtn.classList.add("correct-answer");
+            score++;
+        } else {
+            // WRONG
+            selectedBtn.classList.add("wrong-answer");
+            // Highlight the correct one
+            allBtns.forEach(btn => {
+                if(btn.innerText === correctValue) btn.classList.add("correct-answer");
+            });
+        }
+
+        // Show Next Button
+        document.getElementById("next-btn").classList.remove("hidden");
+    }
+
+    function nextQuestion() {
+        currentQuestionIndex++;
+        if(currentQuestionIndex < currentQuestions.length) {
+            loadQuestion();
+        } else {
+            showResult();
+        }
+    }
+
+    function showResult() {
+        document.getElementById("game-screen").classList.add("hidden");
+        document.getElementById("result-screen").classList.remove("hidden");
+        
+        document.getElementById("score-count").innerText = score + " / " + currentQuestions.length;
+        let percentage = Math.round((score / currentQuestions.length) * 100);
+        document.getElementById("final-score").innerText = percentage + "%";
     }
 </script>
 
