@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz Party!</title>
-    
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
-
     <style>
         /* --- CANDY POP THEME --- */
         :root {
@@ -31,8 +29,7 @@
             text-align: center; border: 4px solid #000; position: relative; z-index: 10;
         }
 
-        h2 { font-weight: 900; font-size: 28px; color: #2d3436; margin: 0 0 25px 0; text-transform: uppercase; }
-        
+        h2 { font-weight: 900; font-size: 28px; color: #2d3436; margin: 0 0 10px 0; text-transform: uppercase; }
         label { display: block; text-align: left; margin-bottom: 8px; font-weight: 800; font-size: 14px; color: #636e72; padding-left: 5px; text-transform: uppercase; }
 
         input, select {
@@ -52,10 +49,24 @@
         button:active { box-shadow: 0 0 0 var(--primary-shadow); transform: translateY(6px); }
         button:disabled { background-color: #bdc3c7; box-shadow: none; cursor: not-allowed; transform: translateY(6px); border-color: #95a5a6; }
 
-        .hidden { display: none; }
+        .hidden { display: none !important; }
         .footer { margin-top: 30px; color: white; font-weight: 700; font-size: 14px; text-shadow: 1px 1px 0px #000; letter-spacing: 1px; opacity: 0.9; }
-        #quiz-header { color: var(--bg-color); }
-        #loading-msg { color: #636e72; }
+        
+        /* Welcome Back Message */
+        .welcome-msg { 
+            background: #e0f7fa; padding: 15px; border-radius: 15px; border: 3px solid #00cec9; 
+            color: #00838f; font-weight: 800; margin-bottom: 25px; 
+        }
+        .logout-link { display: block; margin-top: 5px; color: #d63031; font-size: 12px; cursor: pointer; text-decoration: underline; }
+
+        /* Divider */
+        .section-divider { 
+            border-top: 3px dashed #dfe6e9; margin: 20px 0; position: relative; 
+        }
+        .section-title {
+            background: #fff; padding: 0 10px; color: #b2bec3; font-weight: 800; font-size: 12px;
+            position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+        }
     </style>
 </head>
 <body>
@@ -63,16 +74,29 @@
 <div class="container">
     
     <div id="login-screen">
-        <h2>🚀 Student Login</h2>
+        <h2>🚀 CBSE QUESTION BANK</h2>
         
-        <label>Full Name</label>
-        <input type="text" id="student-name" placeholder="Your Name">
+        <div id="welcome-section" class="hidden">
+            <div class="welcome-msg">
+                Welcome back,<br><span style="font-size: 22px; color: #000;">👋 <span id="display-name">Student</span></span>
+                <span class="logout-link" onclick="logout()">(Not you? Change User)</span>
+            </div>
+        </div>
 
-        <label>Phone Number</label>
-        <input type="tel" id="student-phone" placeholder="99999 88888">
+        <div id="personal-details">
+            <label>Full Name</label>
+            <input type="text" id="student-name" placeholder="Your Name">
 
-        <label>School Name</label>
-        <input type="text" id="student-school" placeholder="School Name">
+            <label>Phone Number</label>
+            <input type="tel" id="student-phone" placeholder="00000 00000">
+
+            <label>School Name</label>
+            <input type="text" id="student-school" placeholder="Your School Name">
+        </div>
+
+        <div class="section-divider">
+            <span class="section-title">CHOOSE YOUR QUIZ</span>
+        </div>
 
         <label>Class</label>
         <select id="class-select">
@@ -106,22 +130,46 @@
     // --- 1. CONFIGURATION ---
     const scriptURL = "https://script.google.com/macros/s/AKfycbwyGIFH_QN1tyMlFxsEeU7VdVeVYG5FVfACJe1dM8FDT9SxHEun1eiprts41rEZSvNE4w/exec"; 
 
-    // --- 2. LOGIC TO HANDLE DROPDOWNS ---
+    // Variables to hold user data
+    let savedName = "";
+    let savedPhone = "";
+    let savedSchool = "";
+
+    // --- 2. CHECK FOR RETURNING USER (ON LOAD) ---
+    window.onload = function() {
+        // Reset Dropdowns to ensure they pick fresh every time
+        document.getElementById("class-select").value = "";
+        document.getElementById("subject-select").innerHTML = '<option value="">-- Pick a class first --</option>';
+        document.getElementById("subject-select").disabled = true;
+
+        // Check Local Storage
+        if(localStorage.getItem("studentName")) {
+            savedName = localStorage.getItem("studentName");
+            savedPhone = localStorage.getItem("studentPhone");
+            savedSchool = localStorage.getItem("studentSchool");
+
+            // Hide Form, Show Welcome
+            document.getElementById("personal-details").classList.add("hidden");
+            document.getElementById("welcome-section").classList.remove("hidden");
+            document.getElementById("display-name").innerText = savedName;
+        }
+    };
+
+    function logout() {
+        localStorage.clear(); // Wipe memory
+        location.reload();    // Refresh page
+    }
+
+    // --- 3. DROPDOWN LOGIC ---
     const classSelect = document.getElementById("class-select");
     const subjectSelect = document.getElementById("subject-select");
     
-    // This runs whenever you change the Class
     classSelect.addEventListener("change", function() {
         const selectedClass = classSelect.value;
-        
-        // Reset the subject box
         subjectSelect.innerHTML = '<option value="">-- Pick a subject --</option>';
         
         if (selectedClass) {
-            // Enable the box
             subjectSelect.disabled = false;
-            
-            // Add the 3 subjects
             const subjects = ["Mathematics", "Science", "Social Science"];
             subjects.forEach(sub => {
                 let option = document.createElement("option");
@@ -130,42 +178,52 @@
                 subjectSelect.appendChild(option);
             });
         } else {
-            // Disable if no class chosen
             subjectSelect.disabled = true;
             subjectSelect.innerHTML = '<option value="">-- Pick a class first --</option>';
         }
     });
 
-    // --- 3. SEND DATA TO GOOGLE SHEETS ---
+    // --- 4. START APP ---
     function startApp() {
-        console.log("Button Clicked!"); // Debugging check
-
-        const name = document.getElementById("student-name").value.trim();
-        const phone = document.getElementById("student-phone").value.trim();
-        const school = document.getElementById("student-school").value.trim();
         const cls = document.getElementById("class-select").value;
         const sub = document.getElementById("subject-select").value;
         const btn = document.getElementById("start-btn");
 
-        // CHECK: Are all fields filled?
-        if(name === "" || phone === "" || school === "" || cls === "" || sub === "") {
-            alert("⚠️ Please fill in all details (Name, Phone, School, Class, and Subject)!"); 
+        let finalName, finalPhone, finalSchool;
+
+        // If returning user, use saved data. If new, use input data.
+        if (savedName !== "") {
+            finalName = savedName;
+            finalPhone = savedPhone;
+            finalSchool = savedSchool;
+        } else {
+            finalName = document.getElementById("student-name").value.trim();
+            finalPhone = document.getElementById("student-phone").value.trim();
+            finalSchool = document.getElementById("student-school").value.trim();
+        }
+
+        // VALIDATION
+        if(finalName === "" || finalPhone === "" || finalSchool === "" || cls === "" || sub === "") {
+            alert("⚠️ Please complete all details!"); 
             return;
         }
 
-        // Lock the button so they can't click twice
+        // SAVE TO MEMORY (For next time)
+        localStorage.setItem("studentName", finalName);
+        localStorage.setItem("studentPhone", finalPhone);
+        localStorage.setItem("studentSchool", finalSchool);
+
+        // LOCK & SEND
         btn.innerText = "SAVING...";
         btn.disabled = true;
 
-        // Prepare Data
         const data = { 
-            name: name, 
-            phone: phone, 
-            school: school,
+            name: finalName, 
+            phone: finalPhone, 
+            school: finalSchool,
             studentClass: cls
         };
 
-        // Send to Google
         fetch(scriptURL, {
             method: 'POST',
             mode: 'no-cors',
@@ -173,15 +231,13 @@
             body: JSON.stringify(data)
         })
         .then(response => {
-            // SUCCESS
             document.getElementById("login-screen").classList.add("hidden");
             document.getElementById("quiz-screen").classList.remove("hidden");
-            document.getElementById("quiz-header").innerText = `Hi, ${name}!`;
+            document.getElementById("quiz-header").innerText = `Hi, ${finalName}!`;
             document.getElementById("loading-msg").innerText = `Success! Starting ${sub} for Class ${cls}...`;
         })
         .catch(error => {
-            // ERROR
-            alert("Error! Could not connect. Check your internet.");
+            alert("Error! Check internet.");
             btn.disabled = false;
             btn.innerText = "LET'S GO! ▶";
         });
