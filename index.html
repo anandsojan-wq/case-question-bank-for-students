@@ -40,7 +40,6 @@
             color: #2d3436; margin-bottom: 20px; box-sizing: border-box; outline: none; transition: all 0.2s;
         }
         
-        /* 3D Button Style */
         button {
             width: 100%; padding: 15px; background: var(--primary-btn); color: #2d3436;
             border: 3px solid #000; border-radius: 15px; font-size: 20px; font-weight: 900;
@@ -60,7 +59,7 @@
         .option-btn {
             background: #fff; border: 3px solid #dfe6e9; color: #2d3436;
             margin-bottom: 15px; text-align: left; font-size: 18px;
-            box-shadow: 0 4px 0 #b2bec3; /* Smaller shadow for options */
+            box-shadow: 0 4px 0 #b2bec3; 
         }
         .option-btn:hover { background: #f1f2f6; }
         
@@ -68,7 +67,13 @@
         .correct-answer { background: var(--correct-green) !important; border-color: #000 !important; color: white !important; box-shadow: 0 4px 0 #006266 !important; }
         .wrong-answer { background: var(--wrong-red) !important; border-color: #000 !important; color: white !important; box-shadow: 0 4px 0 #c0392b !important; }
 
-        /* Result Screen */
+        /* New Feedback Text Style */
+        .feedback-text {
+            margin-top: 15px; padding: 10px; border-radius: 10px; font-weight: 800; font-size: 16px;
+        }
+        .feedback-correct { background-color: #d1f2eb; color: #006266; border: 2px solid #00b894; }
+        .feedback-wrong { background-color: #fadbd8; color: #c0392b; border: 2px solid #ff7675; }
+
         .result-circle {
             width: 120px; height: 120px; background: #ffeaa7; border-radius: 50%; border: 4px solid #000;
             display: flex; justify-content: center; align-items: center; margin: 0 auto 20px auto;
@@ -122,7 +127,12 @@
     <div id="game-screen" class="hidden">
         <div class="quiz-score">Question: <span id="q-number">1</span> / <span id="q-total">20</span></div>
         <div id="question-text" class="question-text">Question goes here?</div>
-        <div id="options-area"></div> <button id="next-btn" class="hidden" onclick="nextQuestion()">NEXT QUESTION ➡</button>
+        
+        <div id="options-area"></div> 
+        
+        <div id="feedback-area" class="hidden"></div>
+
+        <button id="next-btn" class="hidden" onclick="nextQuestion()">NEXT QUESTION ➡</button>
     </div>
 
     <div id="result-screen" class="hidden">
@@ -137,7 +147,7 @@
 <div class="footer">Developed by ICM Educations</div>
 
 <script>
-    // 🔴 1. THIS IS YOUR NEW URL 🔴
+    // 🔴 YOUR GOOGLE SCRIPT URL 🔴
     const scriptURL = "https://script.google.com/macros/s/AKfycbwXeFBp7ZOQ73n-RyxR2DeLTn_DbVVmEN-o62VRplViJcA9peUWie0o5PxuuN3JWwj2xQ/exec"; 
 
     // --- VARIABLES ---
@@ -163,7 +173,6 @@
 
     function logout() { localStorage.clear(); location.reload(); }
 
-    // --- DROPDOWN LOGIC ---
     function updateSubjects() {
         const sel = document.getElementById("class-select").value;
         const sub = document.getElementById("subject-select");
@@ -178,18 +187,15 @@
 
     // --- START APP & FETCH QUESTIONS ---
     function startApp() {
-        // 1. Gather Data
         let name = localStorage.getItem("studentName") || document.getElementById("student-name").value.trim();
         let phone = localStorage.getItem("studentPhone") || document.getElementById("student-phone").value.trim();
         let school = localStorage.getItem("studentSchool") || document.getElementById("student-school").value.trim();
         let cls = document.getElementById("class-select").value;
         let sub = document.getElementById("subject-select").value;
 
-        // 2. Validate
         if(!name || !phone || !school || !cls || !sub) { alert("⚠️ Please fill all details!"); return; }
         if(phone.length !== 10) { alert("⚠️ Phone must be 10 digits!"); return; }
 
-        // 3. Save & Show Loading
         localStorage.setItem("studentName", name);
         localStorage.setItem("studentPhone", phone);
         localStorage.setItem("studentSchool", school);
@@ -197,13 +203,11 @@
         document.getElementById("login-screen").classList.add("hidden");
         document.getElementById("loading-screen").classList.remove("hidden");
 
-        // 4. SAVE LOGIN (Post)
         fetch(scriptURL, {
             method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name: name, phone: phone, school: school, studentClass: cls })
         });
 
-        // 5. FETCH QUESTIONS (Get) - The "Randomizer" Logic
         const fetchUrl = `${scriptURL}?studentClass=${cls}&subject=${sub}`;
         
         fetch(fetchUrl)
@@ -214,17 +218,13 @@
                 location.reload();
                 return;
             }
-
-            // A. SHUFFLE THE QUESTIONS (Fisher-Yates Algorithm)
+            // Shuffle
             for (let i = data.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [data[i], data[j]] = [data[j], data[i]];
             }
-
-            // B. Pick first 20 (or less if not enough questions)
             currentQuestions = data.slice(0, 20);
             
-            // C. Start Quiz
             document.getElementById("loading-screen").classList.add("hidden");
             document.getElementById("game-screen").classList.remove("hidden");
             loadQuestion();
@@ -240,46 +240,56 @@
     function loadQuestion() {
         let q = currentQuestions[currentQuestionIndex];
         
-        // Update Header
         document.getElementById("q-number").innerText = currentQuestionIndex + 1;
         document.getElementById("q-total").innerText = currentQuestions.length;
         document.getElementById("question-text").innerText = q.q;
-        document.getElementById("next-btn").classList.add("hidden"); // Hide Next button
+        document.getElementById("next-btn").classList.add("hidden"); 
+        document.getElementById("feedback-area").classList.add("hidden"); // Hide feedback on new question
 
-        // Create Buttons
         const area = document.getElementById("options-area");
-        area.innerHTML = ""; // Clear old buttons
+        area.innerHTML = ""; 
         
         let options = [q.a, q.b, q.c, q.d];
         
         options.forEach(opt => {
             let btn = document.createElement("button");
-            btn.className = "option-btn"; // Use specific class, not generic button
+            btn.className = "option-btn"; 
             btn.innerText = opt;
-            btn.onclick = () => checkAnswer(btn, opt, q.correct);
+            // .trim() cleans up spaces so logic doesn't fail
+            btn.onclick = () => checkAnswer(btn, opt.trim(), q.correct.trim());
             area.appendChild(btn);
         });
     }
 
     function checkAnswer(selectedBtn, selectedValue, correctValue) {
-        // Disable all buttons so they can't click twice
         let allBtns = document.querySelectorAll(".option-btn");
         allBtns.forEach(btn => btn.disabled = true);
+
+        const feedbackArea = document.getElementById("feedback-area");
+        feedbackArea.classList.remove("hidden");
 
         if(selectedValue === correctValue) {
             // CORRECT
             selectedBtn.classList.add("correct-answer");
             score++;
+            
+            // Show Happy Message
+            feedbackArea.className = "feedback-text feedback-correct";
+            feedbackArea.innerText = "✅ Correct! Great job.";
         } else {
             // WRONG
             selectedBtn.classList.add("wrong-answer");
+            
             // Highlight the correct one
             allBtns.forEach(btn => {
-                if(btn.innerText === correctValue) btn.classList.add("correct-answer");
+                if(btn.innerText.trim() === correctValue) btn.classList.add("correct-answer");
             });
+
+            // Show Correction Message
+            feedbackArea.className = "feedback-text feedback-wrong";
+            feedbackArea.innerText = "❌ Oops! The correct answer is: " + correctValue;
         }
 
-        // Show Next Button
         document.getElementById("next-btn").classList.remove("hidden");
     }
 
