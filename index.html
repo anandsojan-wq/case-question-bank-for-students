@@ -151,7 +151,7 @@
 <div class="container">
     
     <div id="login-screen">
-        <h2>CBSE Question bank</h2>
+        <h2>🚀 Student Login</h2>
         
         <label>Full Name</label>
         <input type="text" id="student-name" placeholder="Super Student">
@@ -193,98 +193,10 @@
 
 <script>
     // --- 1. CONFIGURATION ---
-    // Your Google Web App URL
-    const scriptURL = "https://script.google.com/macros/s/AKfycbzsej8Vnl1VNoPYZCq8K-H4J6ADqt18HphYdyoLFtC83g-2kVVhiZ3d_O7GHS-8GAvsYw/exec"; 
+    // Your NEW Google Web App URL
+    const scriptURL = "https://script.google.com/macros/s/AKfycbwyGIFH_QN1tyMlFxsEeU7VdVeVYG5FVfACJe1dM8FDT9SxHEun1eiprts41rEZSvNE4w/exec"; 
 
     // --- 2. DROPDOWN LOGIC ---
     const standardSubjects = ["Mathematics", "Science", "Social Science"];
     const schoolData = { 
-        "6": standardSubjects, 
-        "7": standardSubjects, 
-        "8": standardSubjects, 
-        "9": standardSubjects, 
-        "10": standardSubjects 
-    };
-
-    function updateSubjects() {
-        const classDropdown = document.getElementById("class-select");
-        const subjectDropdown = document.getElementById("subject-select");
-        const selectedClass = classDropdown.value;
-
-        // Reset Subject Dropdown
-        subjectDropdown.innerHTML = '<option value="">-- Pick a subject --</option>';
-
-        if (selectedClass && schoolData[selectedClass]) {
-            subjectDropdown.disabled = false;
-            schoolData[selectedClass].forEach(subject => {
-                const option = document.createElement("option");
-                option.value = subject;
-                option.innerText = subject;
-                subjectDropdown.appendChild(option);
-            });
-        } else {
-            subjectDropdown.disabled = true;
-            subjectDropdown.innerHTML = '<option value="">-- Pick a class first --</option>';
-        }
-    }
-
-    // --- 3. SEND DATA TO GOOGLE SHEETS ---
-    function startApp() {
-        // Collect Data
-        const name = document.getElementById("student-name").value.trim();
-        const phone = document.getElementById("student-phone").value.trim();
-        const school = document.getElementById("student-school").value.trim();
-        const cls = document.getElementById("class-select").value;
-        const sub = document.getElementById("subject-select").value;
-        const btn = document.getElementById("start-btn");
-
-        // Validation
-        if(name === "" || phone === "" || school === "" || cls === "" || sub === "") {
-            alert("⚠️ Please fill in all details, including School Name!"); 
-            return;
-        }
-
-        // Disable button to prevent double clicks
-        btn.innerText = "SAVING...";
-        btn.disabled = true;
-
-        // Prepare Data Object
-        const data = { 
-            name: name, 
-            phone: phone, 
-            school: school,
-            studentClass: cls, 
-            subject: sub 
-        };
-
-        // Send to Google Sheets
-        fetch(scriptURL, {
-            method: 'POST',
-            mode: 'no-cors', // Standard mode for Google Apps Script
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data)
-        })
-        .then(response => {
-            // Success! Switch to Quiz Screen
-            document.getElementById("login-screen").classList.add("hidden");
-            document.getElementById("quiz-screen").classList.remove("hidden");
-            
-            // Personalize the next screen
-            document.getElementById("quiz-header").innerText = `Hi, ${name}!`;
-            document.getElementById("loading-msg").innerText = `Success! Starting ${sub} for Class ${cls}...`;
-            
-            // (In the next phase, we will trigger the Question Loader here)
-        })
-        .catch(error => {
-            console.error('Error!', error.message);
-            alert("Error! Could not save data. Check your internet.");
-            btn.disabled = false;
-            btn.innerText = "LET'S GO! ▶";
-        });
-    }
-</script>
-
-</body>
-</html>
+        "6": standard
