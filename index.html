@@ -165,7 +165,6 @@
             document.getElementById("display-name").innerText = localStorage.getItem("studentName");
         }
         
-        // Phone protection
         document.getElementById('student-phone').addEventListener('input', function (e) {
             this.value = this.value.replace(/[^0-9]/g, '');
         });
@@ -173,16 +172,45 @@
 
     function logout() { localStorage.clear(); location.reload(); }
 
+    // 🟢 UPDATED LOGIC FOR CLASS 9 & 10 🟢
     function updateSubjects() {
         const sel = document.getElementById("class-select").value;
         const sub = document.getElementById("subject-select");
         sub.innerHTML = '<option value="">-- Pick a subject --</option>';
+        
         if(sel) {
             sub.disabled = false;
-            ["Mathematics", "Science", "Social Science"].forEach(s => {
-                let opt = document.createElement("option"); opt.value = s; opt.innerText = s; sub.appendChild(opt);
+            let subjects = [];
+
+            // If Class is 9 OR 10 -> Show Detailed List
+            if (sel === "9" || sel === "10") {
+                subjects = [
+                    "Mathematics", 
+                    "Science", 
+                    "History", 
+                    "Political Science", 
+                    "Geography", 
+                    "Economics"
+                ];
+            } 
+            // Else (6, 7, 8) -> Show General List
+            else {
+                subjects = [
+                    "Mathematics", 
+                    "Science", 
+                    "Social Science"
+                ];
+            }
+
+            subjects.forEach(s => {
+                let opt = document.createElement("option"); 
+                opt.value = s; 
+                opt.innerText = s; 
+                sub.appendChild(opt);
             });
-        } else { sub.disabled = true; }
+        } else { 
+            sub.disabled = true; 
+        }
     }
 
     // --- START APP & FETCH QUESTIONS ---
@@ -208,17 +236,16 @@
             body: JSON.stringify({ name: name, phone: phone, school: school, studentClass: cls })
         });
 
-        const fetchUrl = `${scriptURL}?studentClass=${cls}&subject=${sub}`;
+        const fetchUrl = `${scriptURL}?studentClass=${cls}&subject=${encodeURIComponent(sub)}`;
         
         fetch(fetchUrl)
         .then(res => res.json())
         .then(data => {
             if(data.length === 0) {
-                alert("⚠️ No questions found for this subject yet! Please check back later.");
+                alert("⚠️ No questions found for " + sub + "! Check your Google Sheet spelling.");
                 location.reload();
                 return;
             }
-            // Shuffle
             for (let i = data.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [data[i], data[j]] = [data[j], data[i]];
@@ -244,7 +271,7 @@
         document.getElementById("q-total").innerText = currentQuestions.length;
         document.getElementById("question-text").innerText = q.q;
         document.getElementById("next-btn").classList.add("hidden"); 
-        document.getElementById("feedback-area").classList.add("hidden"); // Hide feedback on new question
+        document.getElementById("feedback-area").classList.add("hidden");
 
         const area = document.getElementById("options-area");
         area.innerHTML = ""; 
@@ -255,7 +282,6 @@
             let btn = document.createElement("button");
             btn.className = "option-btn"; 
             btn.innerText = opt;
-            // .trim() cleans up spaces so logic doesn't fail
             btn.onclick = () => checkAnswer(btn, opt.trim(), q.correct.trim());
             area.appendChild(btn);
         });
@@ -269,27 +295,18 @@
         feedbackArea.classList.remove("hidden");
 
         if(selectedValue === correctValue) {
-            // CORRECT
             selectedBtn.classList.add("correct-answer");
             score++;
-            
-            // Show Happy Message
             feedbackArea.className = "feedback-text feedback-correct";
             feedbackArea.innerText = "✅ Correct! Great job.";
         } else {
-            // WRONG
             selectedBtn.classList.add("wrong-answer");
-            
-            // Highlight the correct one
             allBtns.forEach(btn => {
                 if(btn.innerText.trim() === correctValue) btn.classList.add("correct-answer");
             });
-
-            // Show Correction Message
             feedbackArea.className = "feedback-text feedback-wrong";
             feedbackArea.innerText = "❌ Oops! The correct answer is: " + correctValue;
         }
-
         document.getElementById("next-btn").classList.remove("hidden");
     }
 
@@ -305,7 +322,6 @@
     function showResult() {
         document.getElementById("game-screen").classList.add("hidden");
         document.getElementById("result-screen").classList.remove("hidden");
-        
         document.getElementById("score-count").innerText = score + " / " + currentQuestions.length;
         let percentage = Math.round((score / currentQuestions.length) * 100);
         document.getElementById("final-score").innerText = percentage + "%";
