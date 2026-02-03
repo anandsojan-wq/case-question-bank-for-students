@@ -8,142 +8,54 @@
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
 
     <style>
-        /* --- CANDY POP THEME CSS --- */
-        
+        /* --- CANDY POP THEME --- */
         :root {
-            --bg-color: #6C5CE7;       /* Bright Purple */
-            --card-bg: #FFFFFF;        /* White */
-            --text-color: #2D3436;     /* Dark Grey */
-            --primary-btn: #FDCB6E;    /* Macaroni Yellow */
-            --primary-shadow: #E1B12C; /* Darker Yellow for 3D effect */
-            --input-bg: #F0F3F7;       /* Light Grey for inputs */
+            --bg-color: #6C5CE7; --card-bg: #FFFFFF; --text-color: #2D3436;
+            --primary-btn: #FDCB6E; --primary-shadow: #E1B12C; --input-bg: #F0F3F7;
             --border-radius: 20px;
         }
 
         body {
             font-family: 'Nunito', sans-serif;
             background-color: var(--bg-color);
-            /* Polka Dot Background Pattern */
             background-image: radial-gradient(#81ECEC 10%, transparent 11%), radial-gradient(#81ECEC 10%, transparent 11%);
             background-size: 60px 60px;
             background-position: 0 0, 30px 30px;
-            
-            display: flex;
-            flex-direction: column; /* Allows footer to sit below */
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            color: var(--text-color);
-            padding: 20px; /* Prevents cutting off on small screens */
-            box-sizing: border-box;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            min-height: 100vh; margin: 0; color: var(--text-color); padding: 20px; box-sizing: border-box;
         }
 
         .container {
-            background: var(--card-bg);
-            padding: 40px;
-            width: 100%;
-            max-width: 420px;
-            border-radius: var(--border-radius);
-            /* The "Card" 3D Effect */
-            box-shadow: 0 8px 0 rgba(0,0,0,0.15);
-            text-align: center;
-            border: 4px solid #000; /* Comic book style border */
-            position: relative;
-            z-index: 10;
+            background: var(--card-bg); padding: 40px; width: 100%; max-width: 420px;
+            border-radius: var(--border-radius); box-shadow: 0 8px 0 rgba(0,0,0,0.15);
+            text-align: center; border: 4px solid #000; position: relative; z-index: 10;
         }
 
-        h2 {
-            font-weight: 900;
-            font-size: 28px;
-            color: #2d3436;
-            margin-top: 0;
-            margin-bottom: 25px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+        h2 { font-weight: 900; font-size: 28px; color: #2d3436; margin: 0 0 25px 0; text-transform: uppercase; }
+        
+        label { display: block; text-align: left; margin-bottom: 8px; font-weight: 800; font-size: 14px; color: #636e72; padding-left: 5px; text-transform: uppercase; }
 
-        /* Fun Label Styling */
-        label {
-            display: block;
-            text-align: left;
-            margin-bottom: 8px;
-            font-weight: 800;
-            font-size: 14px;
-            color: #636e72;
-            padding-left: 5px;
-            text-transform: uppercase;
-        }
-
-        /* Chunky Inputs */
         input, select {
-            width: 100%;
-            padding: 15px;
-            background: var(--input-bg);
-            border: 3px solid #dfe6e9;
-            border-radius: 15px;
-            font-size: 16px;
-            font-family: 'Nunito', sans-serif;
-            font-weight: 700;
-            color: #2d3436;
-            margin-bottom: 20px;
-            box-sizing: border-box; 
-            transition: all 0.2s;
-            outline: none;
+            width: 100%; padding: 15px; background: var(--input-bg);
+            border: 3px solid #dfe6e9; border-radius: 15px;
+            font-size: 16px; font-family: 'Nunito', sans-serif; font-weight: 700;
+            color: #2d3436; margin-bottom: 20px; box-sizing: border-box; outline: none; transition: all 0.2s;
         }
+        input:focus, select:focus { border-color: var(--bg-color); background: #fff; }
 
-        input:focus, select:focus {
-            border-color: var(--bg-color);
-            background: #fff;
-        }
-
-        /* THE 3D BUTTON */
         button {
-            width: 100%;
-            padding: 15px;
-            background: var(--primary-btn);
-            color: #2d3436;
-            border: 3px solid #000;
-            border-radius: 15px;
-            font-size: 20px;
-            font-weight: 900;
-            cursor: pointer;
-            box-shadow: 0 6px 0 var(--primary-shadow); 
-            transition: all 0.1s;
-            text-transform: uppercase;
-            margin-top: 10px;
+            width: 100%; padding: 15px; background: var(--primary-btn); color: #2d3436;
+            border: 3px solid #000; border-radius: 15px; font-size: 20px; font-weight: 900;
+            cursor: pointer; box-shadow: 0 6px 0 var(--primary-shadow); 
+            text-transform: uppercase; margin-top: 10px; transition: all 0.1s;
         }
-
-        button:active {
-            box-shadow: 0 0 0 var(--primary-shadow);
-            transform: translateY(6px); 
-        }
-
-        button:disabled {
-            background-color: #bdc3c7;
-            box-shadow: none;
-            cursor: not-allowed;
-            transform: translateY(6px);
-            border-color: #95a5a6;
-        }
+        button:active { box-shadow: 0 0 0 var(--primary-shadow); transform: translateY(6px); }
+        button:disabled { background-color: #bdc3c7; box-shadow: none; cursor: not-allowed; transform: translateY(6px); border-color: #95a5a6; }
 
         .hidden { display: none; }
-        
-        /* Footer Styling */
-        .footer {
-            margin-top: 30px;
-            color: white;
-            font-weight: 700;
-            font-size: 14px;
-            text-shadow: 1px 1px 0px #000;
-            letter-spacing: 1px;
-            opacity: 0.9;
-        }
-
-        /* Quiz Specifics */
+        .footer { margin-top: 30px; color: white; font-weight: 700; font-size: 14px; text-shadow: 1px 1px 0px #000; letter-spacing: 1px; opacity: 0.9; }
         #quiz-header { color: var(--bg-color); }
         #loading-msg { color: #636e72; }
-
     </style>
 </head>
 <body>
@@ -154,16 +66,16 @@
         <h2>🚀 Student Login</h2>
         
         <label>Full Name</label>
-        <input type="text" id="student-name" placeholder="Super Student">
+        <input type="text" id="student-name" placeholder="Your Name">
 
         <label>Phone Number</label>
-        <input type="tel" id="student-phone" placeholder="98765 43210">
+        <input type="tel" id="student-phone" placeholder="99999 88888">
 
         <label>School Name</label>
-        <input type="text" id="student-school" placeholder="St. Mary's High School">
+        <input type="text" id="student-school" placeholder="School Name">
 
         <label>Class</label>
-        <select id="class-select" onchange="updateSubjects()">
+        <select id="class-select">
             <option value="">-- Pick your level --</option>
             <option value="6">Class 6</option>
             <option value="7">Class 7</option>
@@ -183,7 +95,6 @@
     <div id="quiz-screen" class="hidden">
         <h2 id="quiz-header">Quiz Time!</h2>
         <h3 id="loading-msg">Connecting to database...</h3>
-        
         <button onclick="location.reload()" style="background:#ff7675; box-shadow: 0 6px 0 #d63031;">Quit Game ✖</button>
     </div>
 
@@ -193,10 +104,89 @@
 
 <script>
     // --- 1. CONFIGURATION ---
-    // Your NEW Google Web App URL
     const scriptURL = "https://script.google.com/macros/s/AKfycbwyGIFH_QN1tyMlFxsEeU7VdVeVYG5FVfACJe1dM8FDT9SxHEun1eiprts41rEZSvNE4w/exec"; 
 
-    // --- 2. DROPDOWN LOGIC ---
-    const standardSubjects = ["Mathematics", "Science", "Social Science"];
-    const schoolData = { 
-        "6": standard
+    // --- 2. LOGIC TO HANDLE DROPDOWNS ---
+    const classSelect = document.getElementById("class-select");
+    const subjectSelect = document.getElementById("subject-select");
+    
+    // This runs whenever you change the Class
+    classSelect.addEventListener("change", function() {
+        const selectedClass = classSelect.value;
+        
+        // Reset the subject box
+        subjectSelect.innerHTML = '<option value="">-- Pick a subject --</option>';
+        
+        if (selectedClass) {
+            // Enable the box
+            subjectSelect.disabled = false;
+            
+            // Add the 3 subjects
+            const subjects = ["Mathematics", "Science", "Social Science"];
+            subjects.forEach(sub => {
+                let option = document.createElement("option");
+                option.value = sub;
+                option.innerText = sub;
+                subjectSelect.appendChild(option);
+            });
+        } else {
+            // Disable if no class chosen
+            subjectSelect.disabled = true;
+            subjectSelect.innerHTML = '<option value="">-- Pick a class first --</option>';
+        }
+    });
+
+    // --- 3. SEND DATA TO GOOGLE SHEETS ---
+    function startApp() {
+        console.log("Button Clicked!"); // Debugging check
+
+        const name = document.getElementById("student-name").value.trim();
+        const phone = document.getElementById("student-phone").value.trim();
+        const school = document.getElementById("student-school").value.trim();
+        const cls = document.getElementById("class-select").value;
+        const sub = document.getElementById("subject-select").value;
+        const btn = document.getElementById("start-btn");
+
+        // CHECK: Are all fields filled?
+        if(name === "" || phone === "" || school === "" || cls === "" || sub === "") {
+            alert("⚠️ Please fill in all details (Name, Phone, School, Class, and Subject)!"); 
+            return;
+        }
+
+        // Lock the button so they can't click twice
+        btn.innerText = "SAVING...";
+        btn.disabled = true;
+
+        // Prepare Data
+        const data = { 
+            name: name, 
+            phone: phone, 
+            school: school,
+            studentClass: cls
+        };
+
+        // Send to Google
+        fetch(scriptURL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            // SUCCESS
+            document.getElementById("login-screen").classList.add("hidden");
+            document.getElementById("quiz-screen").classList.remove("hidden");
+            document.getElementById("quiz-header").innerText = `Hi, ${name}!`;
+            document.getElementById("loading-msg").innerText = `Success! Starting ${sub} for Class ${cls}...`;
+        })
+        .catch(error => {
+            // ERROR
+            alert("Error! Could not connect. Check your internet.");
+            btn.disabled = false;
+            btn.innerText = "LET'S GO! ▶";
+        });
+    }
+</script>
+
+</body>
+</html>
