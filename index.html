@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Party!</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- CANDY POP THEME CSS --- */
+        
+        :root {
+            --bg-color: #6C5CE7;       /* Bright Purple */
+            --card-bg: #FFFFFF;        /* White */
+            --text-color: #2D3436;     /* Dark Grey */
+            --primary-btn: #FDCB6E;    /* Macaroni Yellow */
+            --primary-shadow: #E1B12C; /* Darker Yellow for 3D effect */
+            --input-bg: #F0F3F7;       /* Light Grey for inputs */
+            --border-radius: 20px;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: var(--bg-color);
+            /* Polka Dot Background Pattern */
+            background-image: radial-gradient(#81ECEC 10%, transparent 11%), radial-gradient(#81ECEC 10%, transparent 11%);
+            background-size: 60px 60px;
+            background-position: 0 0, 30px 30px;
+            
+            display: flex;
+            flex-direction: column; /* Allows footer to sit below */
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            color: var(--text-color);
+            padding: 20px; /* Prevents cutting off on small screens */
+            box-sizing: border-box;
+        }
+
+        .container {
+            background: var(--card-bg);
+            padding: 40px;
+            width: 100%;
+            max-width: 420px;
+            border-radius: var(--border-radius);
+            /* The "Card" 3D Effect */
+            box-shadow: 0 8px 0 rgba(0,0,0,0.15);
+            text-align: center;
+            border: 4px solid #000; /* Comic book style border */
+            position: relative;
+            z-index: 10;
+        }
+
+        h2 {
+            font-weight: 900;
+            font-size: 28px;
+            color: #2d3436;
+            margin-top: 0;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Fun Label Styling */
+        label {
+            display: block;
+            text-align: left;
+            margin-bottom: 8px;
+            font-weight: 800;
+            font-size: 14px;
+            color: #636e72;
+            padding-left: 5px;
+            text-transform: uppercase;
+        }
+
+        /* Chunky Inputs */
+        input, select {
+            width: 100%;
+            padding: 15px;
+            background: var(--input-bg);
+            border: 3px solid #dfe6e9;
+            border-radius: 15px;
+            font-size: 16px;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 700;
+            color: #2d3436;
+            margin-bottom: 20px;
+            box-sizing: border-box; 
+            transition: all 0.2s;
+            outline: none;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--bg-color);
+            background: #fff;
+        }
+
+        /* THE 3D BUTTON */
+        button {
+            width: 100%;
+            padding: 15px;
+            background: var(--primary-btn);
+            color: #2d3436;
+            border: 3px solid #000;
+            border-radius: 15px;
+            font-size: 20px;
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: 0 6px 0 var(--primary-shadow); 
+            transition: all 0.1s;
+            text-transform: uppercase;
+            margin-top: 10px;
+        }
+
+        button:active {
+            box-shadow: 0 0 0 var(--primary-shadow);
+            transform: translateY(6px); 
+        }
+
+        button:disabled {
+            background-color: #bdc3c7;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: translateY(6px);
+            border-color: #95a5a6;
+        }
+
+        .hidden { display: none; }
+        
+        /* Footer Styling */
+        .footer {
+            margin-top: 30px;
+            color: white;
+            font-weight: 700;
+            font-size: 14px;
+            text-shadow: 1px 1px 0px #000;
+            letter-spacing: 1px;
+            opacity: 0.9;
+        }
+
+        /* Quiz Specifics */
+        #quiz-header { color: var(--bg-color); }
+        #loading-msg { color: #636e72; }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    
+    <div id="login-screen">
+        <h2>CBSE Question bank</h2>
+        
+        <label>Full Name</label>
+        <input type="text" id="student-name" placeholder="Super Student">
+
+        <label>Phone Number</label>
+        <input type="tel" id="student-phone" placeholder="98765 43210">
+
+        <label>School Name</label>
+        <input type="text" id="student-school" placeholder="St. Mary's High School">
+
+        <label>Class</label>
+        <select id="class-select" onchange="updateSubjects()">
+            <option value="">-- Pick your level --</option>
+            <option value="6">Class 6</option>
+            <option value="7">Class 7</option>
+            <option value="8">Class 8</option>
+            <option value="9">Class 9</option>
+            <option value="10">Class 10</option>
+        </select>
+
+        <label>Subject</label>
+        <select id="subject-select" disabled>
+            <option value="">-- Pick a class first --</option>
+        </select>
+
+        <button id="start-btn" onclick="startApp()">LET'S GO! ▶</button>
+    </div>
+
+    <div id="quiz-screen" class="hidden">
+        <h2 id="quiz-header">Quiz Time!</h2>
+        <h3 id="loading-msg">Connecting to database...</h3>
+        
+        <button onclick="location.reload()" style="background:#ff7675; box-shadow: 0 6px 0 #d63031;">Quit Game ✖</button>
+    </div>
+
+</div>
+
+<div class="footer">Developed by ICM Educations</div>
+
+<script>
+    // --- 1. CONFIGURATION ---
+    // Your Google Web App URL
+    const scriptURL = "https://script.google.com/macros/s/AKfycbzsej8Vnl1VNoPYZCq8K-H4J6ADqt18HphYdyoLFtC83g-2kVVhiZ3d_O7GHS-8GAvsYw/exec"; 
+
+    // --- 2. DROPDOWN LOGIC ---
+    const standardSubjects = ["Mathematics", "Science", "Social Science"];
+    const schoolData = { 
+        "6": standardSubjects, 
+        "7": standardSubjects, 
+        "8": standardSubjects, 
+        "9": standardSubjects, 
+        "10": standardSubjects 
+    };
+
+    function updateSubjects() {
+        const classDropdown = document.getElementById("class-select");
+        const subjectDropdown = document.getElementById("subject-select");
+        const selectedClass = classDropdown.value;
+
+        // Reset Subject Dropdown
+        subjectDropdown.innerHTML = '<option value="">-- Pick a subject --</option>';
+
+        if (selectedClass && schoolData[selectedClass]) {
+            subjectDropdown.disabled = false;
+            schoolData[selectedClass].forEach(subject => {
+                const option = document.createElement("option");
+                option.value = subject;
+                option.innerText = subject;
+                subjectDropdown.appendChild(option);
+            });
+        } else {
+            subjectDropdown.disabled = true;
+            subjectDropdown.innerHTML = '<option value="">-- Pick a class first --</option>';
+        }
+    }
+
+    // --- 3. SEND DATA TO GOOGLE SHEETS ---
+    function startApp() {
+        // Collect Data
+        const name = document.getElementById("student-name").value.trim();
+        const phone = document.getElementById("student-phone").value.trim();
+        const school = document.getElementById("student-school").value.trim();
+        const cls = document.getElementById("class-select").value;
+        const sub = document.getElementById("subject-select").value;
+        const btn = document.getElementById("start-btn");
+
+        // Validation
+        if(name === "" || phone === "" || school === "" || cls === "" || sub === "") {
+            alert("⚠️ Please fill in all details, including School Name!"); 
+            return;
+        }
+
+        // Disable button to prevent double clicks
+        btn.innerText = "SAVING...";
+        btn.disabled = true;
+
+        // Prepare Data Object
+        const data = { 
+            name: name, 
+            phone: phone, 
+            school: school,
+            studentClass: cls, 
+            subject: sub 
+        };
+
+        // Send to Google Sheets
+        fetch(scriptURL, {
+            method: 'POST',
+            mode: 'no-cors', // Standard mode for Google Apps Script
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            // Success! Switch to Quiz Screen
+            document.getElementById("login-screen").classList.add("hidden");
+            document.getElementById("quiz-screen").classList.remove("hidden");
+            
+            // Personalize the next screen
+            document.getElementById("quiz-header").innerText = `Hi, ${name}!`;
+            document.getElementById("loading-msg").innerText = `Success! Starting ${sub} for Class ${cls}...`;
+            
+            // (In the next phase, we will trigger the Question Loader here)
+        })
+        .catch(error => {
+            console.error('Error!', error.message);
+            alert("Error! Could not save data. Check your internet.");
+            btn.disabled = false;
+            btn.innerText = "LET'S GO! ▶";
+        });
+    }
+</script>
+
+</body>
+</html>
