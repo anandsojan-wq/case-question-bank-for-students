@@ -52,12 +52,14 @@
         .hidden { display: none !important; }
         .footer { margin-top: 30px; color: white; font-weight: 700; font-size: 14px; text-shadow: 1px 1px 0px #000; letter-spacing: 1px; opacity: 0.9; }
         
+        /* Welcome Back Message */
         .welcome-msg { 
             background: #e0f7fa; padding: 15px; border-radius: 15px; border: 3px solid #00cec9; 
             color: #00838f; font-weight: 800; margin-bottom: 25px; 
         }
         .logout-link { display: block; margin-top: 5px; color: #d63031; font-size: 12px; cursor: pointer; text-decoration: underline; }
 
+        /* Divider */
         .section-divider { 
             border-top: 3px dashed #dfe6e9; margin: 20px 0; position: relative; 
         }
@@ -86,7 +88,7 @@
             <input type="text" id="student-name" placeholder="Your Name">
 
             <label>Phone Number</label>
-            <input type="tel" id="student-phone" placeholder="0000000000" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+            <input type="tel" id="student-phone" placeholder="9876543210" maxlength="10">
 
             <label>School Name</label>
             <input type="text" id="student-school" placeholder="Your School Name">
@@ -125,33 +127,49 @@
 <div class="footer">Developed by ICM Educations</div>
 
 <script>
+    // --- 1. CONFIGURATION ---
     const scriptURL = "https://script.google.com/macros/s/AKfycbwyGIFH_QN1tyMlFxsEeU7VdVeVYG5FVfACJe1dM8FDT9SxHEun1eiprts41rEZSvNE4w/exec"; 
 
+    // Variables to hold user data
     let savedName = "";
     let savedPhone = "";
     let savedSchool = "";
 
+    // --- 2. ON LOAD & PHONE VALIDATION ---
     window.onload = function() {
+        // A. Reset Dropdowns
         document.getElementById("class-select").value = "";
         document.getElementById("subject-select").innerHTML = '<option value="">-- Pick a class first --</option>';
         document.getElementById("subject-select").disabled = true;
 
+        // B. Check for Returning User
         if(localStorage.getItem("studentName")) {
             savedName = localStorage.getItem("studentName");
             savedPhone = localStorage.getItem("studentPhone");
             savedSchool = localStorage.getItem("studentSchool");
 
+            // Hide Form, Show Welcome
             document.getElementById("personal-details").classList.add("hidden");
             document.getElementById("welcome-section").classList.remove("hidden");
             document.getElementById("display-name").innerText = savedName;
         }
+
+        // C. Setup Phone Number Input Protection (Only Numbers allowed)
+        const phoneInput = document.getElementById('student-phone');
+        if(phoneInput) {
+            phoneInput.addEventListener('input', function (e) {
+                // Remove any non-number character immediately
+                this.value = this.value.replace(/[^0-9]/g, '');
+            });
+        }
     };
 
     function logout() {
-        localStorage.clear();
-        location.reload();
+        localStorage.clear(); // Wipe memory
+        location.reload();    // Refresh page
     }
 
+    // --- 3. DROPDOWN LOGIC ---
     const classSelect = document.getElementById("class-select");
     const subjectSelect = document.getElementById("subject-select");
     
@@ -174,6 +192,7 @@
         }
     });
 
+    // --- 4. START APP ---
     function startApp() {
         const cls = document.getElementById("class-select").value;
         const sub = document.getElementById("subject-select").value;
@@ -181,6 +200,7 @@
 
         let finalName, finalPhone, finalSchool;
 
+        // If returning user, use saved data. If new, use input data.
         if (savedName !== "") {
             finalName = savedName;
             finalPhone = savedPhone;
@@ -199,7 +219,7 @@
             return;
         }
 
-        // 2. CHECK: Phone Number Length (The New Feature)
+        // 2. CHECK: Phone Number Length (Must be exactly 10)
         if (finalPhone.length !== 10) {
             alert("⚠️ Invalid Phone Number! It must be exactly 10 digits.");
             return; // Stops the code here
@@ -207,10 +227,12 @@
 
         // ---------------------------
 
+        // SAVE TO MEMORY (For next time)
         localStorage.setItem("studentName", finalName);
         localStorage.setItem("studentPhone", finalPhone);
         localStorage.setItem("studentSchool", finalSchool);
 
+        // LOCK & SEND
         btn.innerText = "SAVING...";
         btn.disabled = true;
 
