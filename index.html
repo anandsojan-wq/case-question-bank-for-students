@@ -172,7 +172,7 @@
 
     function logout() { localStorage.clear(); location.reload(); }
 
-    // 🟢 UPDATED LOGIC: Added 'English' for Class 9 & 10 🟢
+    // 🟢 UPDATED: Maths Removed 🟢
     function updateSubjects() {
         const sel = document.getElementById("class-select").value;
         const sub = document.getElementById("subject-select");
@@ -182,11 +182,10 @@
             sub.disabled = false;
             let subjects = [];
 
-            // If Class is 9 OR 10 -> Show Detailed List including English
+            // If Class is 9 OR 10 -> Show Detailed List (NO MATHS)
             if (sel === "9" || sel === "10") {
                 subjects = [
                     "English",
-                    "Mathematics", 
                     "Science", 
                     "History", 
                     "Political Science", 
@@ -194,10 +193,9 @@
                     "Economics"
                 ];
             } 
-            // Else (6, 7, 8) -> Show General List
+            // Else (6, 7, 8) -> Show General List (NO MATHS)
             else {
                 subjects = [
-                    "Mathematics", 
                     "Science", 
                     "Social Science"
                 ];
