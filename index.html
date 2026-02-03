@@ -172,7 +172,7 @@
 
     function logout() { localStorage.clear(); location.reload(); }
 
-    // 🟢 UPDATED LOGIC FOR CLASS 9 & 10 🟢
+    // 🟢 UPDATED LOGIC: Added 'English' for Class 9 & 10 🟢
     function updateSubjects() {
         const sel = document.getElementById("class-select").value;
         const sub = document.getElementById("subject-select");
@@ -182,9 +182,10 @@
             sub.disabled = false;
             let subjects = [];
 
-            // If Class is 9 OR 10 -> Show Detailed List
+            // If Class is 9 OR 10 -> Show Detailed List including English
             if (sel === "9" || sel === "10") {
                 subjects = [
+                    "English",
                     "Mathematics", 
                     "Science", 
                     "History", 
