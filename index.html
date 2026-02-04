@@ -2,79 +2,118 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz Party!</title>
+    <meta na!me="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CBSE Question Bank</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        /* --- CANDY POP THEME --- */
+        /* --- COMPACT MOBILE THEME --- */
         :root {
             --bg-color: #6C5CE7; --card-bg: #FFFFFF; --text-color: #2D3436;
             --primary-btn: #FDCB6E; --primary-shadow: #E1B12C; --input-bg: #F0F3F7;
             --correct-green: #00b894; --wrong-red: #ff7675;
-            --border-radius: 20px;
         }
+
+        * { box-sizing: border-box; }
 
         body {
             font-family: 'Nunito', sans-serif;
             background-color: var(--bg-color);
-            background-image: radial-gradient(#81ECEC 10%, transparent 11%), radial-gradient(#81ECEC 10%, transparent 11%);
-            background-size: 60px 60px;
-            background-position: 0 0, 30px 30px;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            min-height: 100vh; margin: 0; color: var(--text-color); padding: 20px; box-sizing: border-box;
+            margin: 0; padding: 0;
+            height: 100vh; width: 100vw;
+            overflow: hidden; /* ⛔ NO SCROLL */
+            display: flex; justify-content: center; align-items: center;
         }
 
         .container {
-            background: var(--card-bg); padding: 30px; width: 100%; max-width: 450px;
-            border-radius: var(--border-radius); box-shadow: 0 8px 0 rgba(0,0,0,0.15);
-            text-align: center; border: 4px solid #000; position: relative; z-index: 10;
+            background: var(--card-bg);
+            width: 100%; height: 100%; /* Full Screen */
+            max-width: 500px; /* Limits width on Desktop */
+            padding: 20px;
+            display: flex; flex-direction: column; justify-content: center; /* Center Vertically */
+            text-align: center;
+            position: relative;
         }
 
-        h2 { font-weight: 900; font-size: 28px; color: #2d3436; margin: 0 0 10px 0; text-transform: uppercase; }
-        label { display: block; text-align: left; margin-bottom: 8px; font-weight: 800; font-size: 14px; color: #636e72; padding-left: 5px; text-transform: uppercase; }
+        /* Responsive Text: Scales with screen height */
+        h2 { 
+            font-weight: 900; 
+            font-size: clamp(24px, 4vh, 32px); 
+            color: #2d3436; margin: 0 0 15px 0; 
+            text-transform: uppercase; 
+            line-height: 1.2;
+        }
 
+        /* Compact Inputs */
         input, select {
-            width: 100%; padding: 15px; background: var(--input-bg);
-            border: 3px solid #dfe6e9; border-radius: 15px;
-            font-size: 16px; font-family: 'Nunito', sans-serif; font-weight: 700;
-            color: #2d3436; margin-bottom: 20px; box-sizing: border-box; outline: none; transition: all 0.2s;
+            width: 100%; padding: 12px; 
+            background: var(--input-bg);
+            border: 2px solid #dfe6e9; border-radius: 12px;
+            font-size: 16px; font-weight: 700; font-family: 'Nunito', sans-serif;
+            color: #2d3436; margin-bottom: 10px; 
+            outline: none;
         }
         
+        /* Side-by-Side Dropdowns */
+        .row { display: flex; gap: 10px; }
+        .row select { width: 50%; }
+
+        /* Big Action Button */
         button {
-            width: 100%; padding: 15px; background: var(--primary-btn); color: #2d3436;
-            border: 3px solid #000; border-radius: 15px; font-size: 20px; font-weight: 900;
-            cursor: pointer; box-shadow: 0 6px 0 var(--primary-shadow); 
-            text-transform: uppercase; margin-top: 10px; transition: all 0.1s;
+            width: 100%; padding: 15px; 
+            background: var(--primary-btn); color: #2d3436;
+            border: 3px solid #000; border-radius: 12px; 
+            font-size: 18px; font-weight: 900;
+            cursor: pointer; box-shadow: 0 4px 0 var(--primary-shadow); 
+            text-transform: uppercase; margin-top: 5px;
         }
-        button:active { box-shadow: 0 0 0 var(--primary-shadow); transform: translateY(6px); }
-        button:disabled { background-color: #bdc3c7; box-shadow: none; transform: translateY(6px); border-color: #95a5a6; }
+        button:active { box-shadow: 0 0 0 var(--primary-shadow); transform: translateY(4px); }
+        button:disabled { background-color: #bdc3c7; box-shadow: none; border-color: #95a5a6; }
 
         .hidden { display: none !important; }
-        .footer { margin-top: 30px; color: white; font-weight: 700; font-size: 14px; text-shadow: 1px 1px 0px #000; opacity: 0.9; }
-
-        /* QUIZ STYLES */
-        .quiz-score { font-size: 14px; color: #636e72; font-weight: 800; margin-bottom: 20px; text-align: right; }
-        .question-text { font-size: 22px; font-weight: 800; line-height: 1.4; margin-bottom: 25px; text-align: left; }
-        
-        .option-btn {
-            background: #fff; border: 3px solid #dfe6e9; color: #2d3436;
-            margin-bottom: 15px; text-align: left; font-size: 18px;
-            box-shadow: 0 4px 0 #b2bec3; 
+        .footer { 
+            position: absolute; bottom: 10px; left: 0; right: 0; 
+            font-size: 12px; color: #b2bec3; font-weight: 700; 
         }
-        .option-btn:hover { background: #f1f2f6; }
-        
-        .correct-answer { background: var(--correct-green) !important; border-color: #000 !important; color: white !important; box-shadow: 0 4px 0 #006266 !important; }
-        .wrong-answer { background: var(--wrong-red) !important; border-color: #000 !important; color: white !important; box-shadow: 0 4px 0 #c0392b !important; }
 
-        .feedback-text { margin-top: 15px; padding: 10px; border-radius: 10px; font-weight: 800; font-size: 16px; }
+        /* --- QUIZ SCREEN OPTIMIZATIONS --- */
+        .quiz-score { font-size: 14px; color: #636e72; font-weight: 800; margin-bottom: 10px; text-align: right; }
+        
+        .question-text { 
+            font-size: clamp(18px, 2.5vh, 24px); /* Scales text */
+            font-weight: 800; line-height: 1.3; 
+            margin-bottom: 15px; text-align: left; 
+            min-height: 60px; /* Prevents jumpiness */
+            display: flex; align-items: center;
+        }
+        
+        /* Scrollable Options Area (Only if options are huge) */
+        #options-area {
+            display: flex; flex-direction: column; gap: 8px;
+            flex-grow: 1; /* Fills remaining space */
+            overflow-y: auto; /* Scroll ONLY options if needed */
+        }
+
+        .option-btn {
+            background: #fff; border: 2px solid #dfe6e9; 
+            color: #2d3436; padding: 12px;
+            text-align: left; font-size: 16px; margin: 0;
+            box-shadow: 0 3px 0 #b2bec3; 
+        }
+
+        .correct-answer { background: var(--correct-green) !important; color: white !important; border-color: #000 !important; }
+        .wrong-answer { background: var(--wrong-red) !important; color: white !important; border-color: #000 !important; }
+
+        .feedback-text { 
+            margin-top: 10px; padding: 8px; border-radius: 8px; 
+            font-weight: 800; font-size: 14px; 
+        }
         .feedback-correct { background-color: #d1f2eb; color: #006266; border: 2px solid #00b894; }
         .feedback-wrong { background-color: #fadbd8; color: #c0392b; border: 2px solid #ff7675; }
 
-        .result-circle { width: 120px; height: 120px; background: #ffeaa7; border-radius: 50%; border: 4px solid #000; display: flex; justify-content: center; align-items: center; margin: 0 auto 20px auto; font-size: 40px; font-weight: 900; color: #2d3436; }
-
+        /* Loader */
         .loader {
-            border: 8px solid #f3f3f3; border-top: 8px solid #FDCB6E;
-            border-radius: 50%; width: 50px; height: 50px;
+            border: 6px solid #f3f3f3; border-top: 6px solid #FDCB6E;
+            border-radius: 50%; width: 40px; height: 40px;
             animation: spin 1s linear infinite; margin: 20px auto;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -85,83 +124,78 @@
 <div class="container">
     
     <div id="login-screen">
-        <h2>🚀 CBSE QUESTION BANK</h2>
+        <h2>CBSE QUESTION BANK</h2>
         
         <div id="welcome-section" class="hidden">
-            <div style="background: #e0f7fa; padding: 15px; border-radius: 15px; border: 3px solid #00cec9; margin-bottom: 20px;">
-                Welcome back,<br><span style="font-size: 22px; font-weight:900;">👋 <span id="display-name">Student</span></span>
-                <span style="display:block; margin-top:5px; font-size:12px; text-decoration:underline; cursor:pointer;" onclick="logout()">(Not you? Change User)</span>
+            <div style="background: #e0f7fa; padding: 10px; border-radius: 10px; border: 2px solid #00cec9; margin-bottom: 15px;">
+                Welcome back, <span style="font-weight:900;" id="display-name">Student</span>
+                <div style="font-size:11px; text-decoration:underline; cursor:pointer; margin-top:4px;" onclick="logout()">Not you? Change User</div>
             </div>
         </div>
 
         <div id="personal-details">
-            <label>Full Name</label> <input type="text" id="student-name" placeholder="Your Name">
-            <label>Phone Number</label> <input type="tel" id="student-phone" placeholder="9876543210" maxlength="10">
-            <label>School Name</label> <input type="text" id="student-school" placeholder="Your School Name">
+            <input type="text" id="student-name" placeholder="Enter Full Name">
+            <input type="tel" id="student-phone" placeholder="Phone Number (10 digits)" maxlength="10">
+            <input type="text" id="student-school" placeholder="School Name">
         </div>
 
-        <div style="border-top: 3px dashed #dfe6e9; margin: 20px 0; position: relative;">
-            <span style="background: #fff; padding: 0 10px; color: #b2bec3; font-weight: 800; font-size: 12px; position: absolute; top: -10px; left: 50%; transform: translateX(-50%);">CHOOSE YOUR QUIZ</span>
+        <div style="height: 2px; background: #dfe6e9; margin: 15px 0;"></div>
+
+        <div class="row">
+            <select id="class-select" onchange="updateSubjects()">
+                <option value="">Class</option>
+                <option value="10">10</option>
+            </select>
+
+            <select id="subject-select" disabled>
+                <option value="">Subject</option>
+            </select>
         </div>
 
-        <label>Class</label>
-        <select id="class-select" onchange="updateSubjects()">
-            <option value="">-- Pick your level --</option>
-            <option value="10">Class 10</option>
-        </select>
-
-        <label>Subject</label>
-        <select id="subject-select" disabled>
-            <option value="">-- Pick a class first --</option>
-        </select>
-
-        <button id="start-btn" onclick="startApp()">LET'S GO! ▶</button>
+        <button id="start-btn" onclick="startApp()">START QUIZ ▶</button>
     </div>
 
     <div id="loading-screen" class="hidden">
-        <h2>⏳ Please Wait...</h2>
+        <h2>⏳ Loading...</h2>
         <div class="loader"></div>
-        <p>Fetching your questions from the cloud.<br>This might take a few seconds!</p>
+        <p style="font-size: 14px; color: #636e72;">Fetching questions...</p>
     </div>
 
-    <div id="game-screen" class="hidden">
-        <div class="quiz-score">Question: <span id="q-number">1</span> / <span id="q-total">20</span></div>
+    <div id="game-screen" class="hidden" style="height: 100%; display: flex; flex-direction: column;">
+        <div class="quiz-score">Q: <span id="q-number">1</span>/<span id="q-total">20</span></div>
         <div id="question-text" class="question-text">Question goes here?</div>
+        
         <div id="options-area"></div> 
+        
         <div id="feedback-area" class="hidden"></div>
-        <button id="next-btn" class="hidden" onclick="nextQuestion()">NEXT QUESTION ➡</button>
+        <button id="next-btn" class="hidden" onclick="nextQuestion()">NEXT ➡</button>
     </div>
 
     <div id="result-screen" class="hidden">
-        <h2>🏆 QUIZ COMPLETE!</h2>
-        <div class="result-circle" id="final-score">0%</div>
-        <p>You got <span id="score-count">0</span> correct answers.</p>
+        <h2>🏆 FINISHED!</h2>
+        <div style="font-size: 60px; margin: 20px 0;">🎉</div>
+        <h1 id="final-score" style="font-size: 50px; margin: 0; color: #2d3436;">0%</h1>
+        <p style="color: #636e72; font-weight: 700;">Score: <span id="score-count">0</span> correct</p>
         <button onclick="location.reload()">PLAY AGAIN 🔄</button>
     </div>
 
+    <div class="footer">Developed by ICM Educations</div>
 </div>
 
-<div class="footer">Developed by ICM Educations</div>
-
 <script>
-    // 🔴 YOUR GOOGLE SCRIPT URL 🔴
     const scriptURL = "https://script.google.com/macros/s/AKfycbwXeFBp7ZOQ73n-RyxR2DeLTn_DbVVmEN-o62VRplViJcA9peUWie0o5PxuuN3JWwj2xQ/exec"; 
 
-    // --- VARIABLES ---
     let currentQuestions = [];
     let currentQuestionIndex = 0;
     let score = 0;
     
-    // --- ON LOAD ---
     window.onload = function() {
         document.getElementById("class-select").value = "";
-        
         if(localStorage.getItem("studentName")) {
             document.getElementById("personal-details").classList.add("hidden");
             document.getElementById("welcome-section").classList.remove("hidden");
             document.getElementById("display-name").innerText = localStorage.getItem("studentName");
         }
-        
         document.getElementById('student-phone').addEventListener('input', function (e) {
             this.value = this.value.replace(/[^0-9]/g, '');
         });
@@ -169,36 +203,22 @@
 
     function logout() { localStorage.clear(); location.reload(); }
 
-    // 🟢 SIMPLIFIED SUBJECT LIST (ONLY CLASS 10) 🟢
     function updateSubjects() {
         const sel = document.getElementById("class-select").value;
         const sub = document.getElementById("subject-select");
-        sub.innerHTML = '<option value="">-- Pick a subject --</option>';
+        sub.innerHTML = '<option value="">Subject</option>';
         
         if(sel === "10") {
             sub.disabled = false;
-            // Removed Maths as requested
-            const subjects = [
-                "English",
-                "Science", 
-                "History", 
-                "Political Science", 
-                "Geography", 
-                "Economics"
-            ];
-
+            const subjects = ["English", "Science", "History", "Political Science", "Geography", "Economics"];
             subjects.forEach(s => {
-                let opt = document.createElement("option"); 
-                opt.value = s; 
-                opt.innerText = s; 
-                sub.appendChild(opt);
+                let opt = document.createElement("option"); opt.value = s; opt.innerText = s; sub.appendChild(opt);
             });
         } else { 
             sub.disabled = true; 
         }
     }
 
-    // --- START APP & FETCH QUESTIONS ---
     function startApp() {
         let name = localStorage.getItem("studentName") || document.getElementById("student-name").value.trim();
         let phone = localStorage.getItem("studentPhone") || document.getElementById("student-phone").value.trim();
@@ -216,11 +236,11 @@
         document.getElementById("login-screen").classList.add("hidden");
         document.getElementById("loading-screen").classList.remove("hidden");
 
-        // Send login data silently
+        // Silent Login
         fetch(scriptURL, {
             method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name: name, phone: phone, school: school, studentClass: cls })
-        }).catch(e => console.log("Login log failed, but continuing..."));
+        }).catch(e => console.log("Log error"));
 
         // Fetch Questions
         const fetchUrl = `${scriptURL}?studentClass=${cls}&subject=${encodeURIComponent(sub)}`;
@@ -228,12 +248,7 @@
         fetch(fetchUrl)
         .then(res => res.json())
         .then(data => {
-            if(data.length === 0) {
-                alert("⚠️ No questions found for " + sub + "! Check your Google Sheet spelling.");
-                location.reload();
-                return;
-            }
-            // Shuffle
+            if(data.length === 0) { alert("No questions found!"); location.reload(); return; }
             for (let i = data.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [data[i], data[j]] = [data[j], data[i]];
@@ -241,20 +256,17 @@
             currentQuestions = data.slice(0, 20);
             
             document.getElementById("loading-screen").classList.add("hidden");
-            document.getElementById("game-screen").classList.remove("hidden");
+            // Important: Use flex to keep game screen full height
+            let gameScreen = document.getElementById("game-screen");
+            gameScreen.classList.remove("hidden");
+            gameScreen.style.display = "flex"; 
             loadQuestion();
         })
-        .catch(err => {
-            console.error(err);
-            alert("Error fetching questions! Check your URL or Internet.");
-            location.reload();
-        });
+        .catch(err => { alert("Connection Error!"); location.reload(); });
     }
 
-    // --- QUIZ GAME LOGIC ---
     function loadQuestion() {
         let q = currentQuestions[currentQuestionIndex];
-        
         document.getElementById("q-number").innerText = currentQuestionIndex + 1;
         document.getElementById("q-total").innerText = currentQuestions.length;
         document.getElementById("question-text").innerText = q.q;
@@ -265,7 +277,6 @@
         area.innerHTML = ""; 
         
         let options = [q.a, q.b, q.c, q.d];
-        
         options.forEach(opt => {
             let btn = document.createElement("button");
             btn.className = "option-btn"; 
@@ -291,16 +302,14 @@
             selectedBtn.classList.add("correct-answer");
             score++;
             feedbackArea.className = "feedback-text feedback-correct";
-            feedbackArea.innerText = "✅ Correct! Great job.";
+            feedbackArea.innerText = "✅ Correct!";
         } else {
             selectedBtn.classList.add("wrong-answer");
             allBtns.forEach(btn => {
-                if(String(btn.innerText).trim().toLowerCase() === safeCorrect) {
-                    btn.classList.add("correct-answer");
-                }
+                if(String(btn.innerText).trim().toLowerCase() === safeCorrect) btn.classList.add("correct-answer");
             });
             feedbackArea.className = "feedback-text feedback-wrong";
-            feedbackArea.innerText = "❌ Oops! The correct answer is: " + correctValue;
+            feedbackArea.innerText = "❌ Correct: " + correctValue;
         }
         document.getElementById("next-btn").classList.remove("hidden");
     }
@@ -315,7 +324,7 @@
     }
 
     function showResult() {
-        document.getElementById("game-screen").classList.add("hidden");
+        document.getElementById("game-screen").style.display = "none"; // Hard hide
         document.getElementById("result-screen").classList.remove("hidden");
         document.getElementById("score-count").innerText = score + " / " + currentQuestions.length;
         let percentage = Math.round((score / currentQuestions.length) * 100);
