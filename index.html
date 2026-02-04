@@ -52,6 +52,74 @@
         .hidden { display: none !important; }
         .footer { margin-top: 30px; color: white; font-weight: 700; font-size: 14px; text-shadow: 1px 1px 0px #000; opacity: 0.9; }
 
+        /* TIMER STYLES */
+        .timer-container {
+            background: linear-gradient(135deg, #A29BFE 0%, #6C5CE7 100%);
+            border: 4px solid #000;
+            border-radius: 20px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 6px 0 rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .timer-display {
+            font-size: 32px;
+            font-weight: 900;
+            color: #fff;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .timer-icon {
+            font-size: 28px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .timer-bar {
+            height: 8px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 10px;
+            margin-top: 12px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .timer-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #FDCB6E 0%, #FAB1A0 100%);
+            border-radius: 10px;
+            transition: width 1s linear;
+            box-shadow: 0 0 10px rgba(253, 203, 110, 0.5);
+        }
+
+        .timer-warning {
+            animation: warning-flash 1s ease-in-out infinite;
+        }
+
+        @keyframes warning-flash {
+            0%, 100% { background: linear-gradient(135deg, #A29BFE 0%, #6C5CE7 100%); }
+            50% { background: linear-gradient(135deg, #ff7675 0%, #d63031 100%); }
+        }
+
+        .timer-text {
+            font-size: 12px;
+            color: rgba(255,255,255,0.9);
+            margin-top: 8px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
         /* QUIZ STYLES */
         .quiz-score { font-size: 14px; color: #636e72; font-weight: 800; margin-bottom: 20px; text-align: right; }
         .question-text { font-size: 22px; font-weight: 800; line-height: 1.4; margin-bottom: 25px; text-align: left; }
@@ -125,6 +193,18 @@
     </div>
 
     <div id="game-screen" class="hidden">
+        <!-- TIMER DISPLAY -->
+        <div class="timer-container" id="timer-container">
+            <div class="timer-display">
+                <span class="timer-icon">⏱️</span>
+                <span id="timer-display">5:00</span>
+            </div>
+            <div class="timer-bar">
+                <div class="timer-fill" id="timer-fill"></div>
+            </div>
+            <div class="timer-text">Time Remaining</div>
+        </div>
+
         <div class="quiz-score">Question: <span id="q-number">1</span> / <span id="q-total">20</span></div>
         <div id="question-text" class="question-text">Question goes here?</div>
         <div id="options-area"></div> 
@@ -151,6 +231,11 @@
     let currentQuestions = [];
     let currentQuestionIndex = 0;
     let score = 0;
+    
+    // TIMER VARIABLES
+    let timeRemaining = 300; // 5 minutes in seconds
+    let timerInterval = null;
+    let totalTime = 300;
     
     // --- ON LOAD ---
     window.onload = function() {
@@ -198,6 +283,44 @@
         }
     }
 
+    // --- TIMER FUNCTIONS ---
+    function startTimer() {
+        timerInterval = setInterval(() => {
+            timeRemaining--;
+            updateTimerDisplay();
+            
+            if(timeRemaining <= 0) {
+                clearInterval(timerInterval);
+                timeUp();
+            }
+        }, 1000);
+    }
+
+    function updateTimerDisplay() {
+        const minutes = Math.floor(timeRemaining / 60);
+        const seconds = timeRemaining % 60;
+        const display = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        
+        document.getElementById('timer-display').innerText = display;
+        
+        // Update progress bar
+        const percentage = (timeRemaining / totalTime) * 100;
+        document.getElementById('timer-fill').style.width = percentage + '%';
+        
+        // Warning animation when less than 1 minute
+        const timerContainer = document.getElementById('timer-container');
+        if(timeRemaining <= 60 && timeRemaining > 0) {
+            timerContainer.classList.add('timer-warning');
+        } else {
+            timerContainer.classList.remove('timer-warning');
+        }
+    }
+
+    function timeUp() {
+        alert("⏰ Time's up! The quiz will now end.");
+        showResult();
+    }
+
     // --- START APP & FETCH QUESTIONS ---
     function startApp() {
         let name = localStorage.getItem("studentName") || document.getElementById("student-name").value.trim();
@@ -242,6 +365,10 @@
             
             document.getElementById("loading-screen").classList.add("hidden");
             document.getElementById("game-screen").classList.remove("hidden");
+            
+            // START THE TIMER
+            startTimer();
+            
             loadQuestion();
         })
         .catch(err => {
@@ -310,11 +437,13 @@
         if(currentQuestionIndex < currentQuestions.length) {
             loadQuestion();
         } else {
+            clearInterval(timerInterval); // Stop timer when quiz ends
             showResult();
         }
     }
 
     function showResult() {
+        clearInterval(timerInterval); // Ensure timer is stopped
         document.getElementById("game-screen").classList.add("hidden");
         document.getElementById("result-screen").classList.remove("hidden");
         document.getElementById("score-count").innerText = score + " / " + currentQuestions.length;
