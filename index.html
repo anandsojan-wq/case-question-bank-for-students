@@ -63,22 +63,22 @@
         }
         .option-btn:hover { background: #f1f2f6; }
         
-        /* Feedback Colors */
         .correct-answer { background: var(--correct-green) !important; border-color: #000 !important; color: white !important; box-shadow: 0 4px 0 #006266 !important; }
         .wrong-answer { background: var(--wrong-red) !important; border-color: #000 !important; color: white !important; box-shadow: 0 4px 0 #c0392b !important; }
 
-        /* New Feedback Text Style */
-        .feedback-text {
-            margin-top: 15px; padding: 10px; border-radius: 10px; font-weight: 800; font-size: 16px;
-        }
+        .feedback-text { margin-top: 15px; padding: 10px; border-radius: 10px; font-weight: 800; font-size: 16px; }
         .feedback-correct { background-color: #d1f2eb; color: #006266; border: 2px solid #00b894; }
         .feedback-wrong { background-color: #fadbd8; color: #c0392b; border: 2px solid #ff7675; }
 
-        .result-circle {
-            width: 120px; height: 120px; background: #ffeaa7; border-radius: 50%; border: 4px solid #000;
-            display: flex; justify-content: center; align-items: center; margin: 0 auto 20px auto;
-            font-size: 40px; font-weight: 900; color: #2d3436;
+        .result-circle { width: 120px; height: 120px; background: #ffeaa7; border-radius: 50%; border: 4px solid #000; display: flex; justify-content: center; align-items: center; margin: 0 auto 20px auto; font-size: 40px; font-weight: 900; color: #2d3436; }
+
+        /* 🌀 NEW LOADING SPINNER CSS */
+        .loader {
+            border: 8px solid #f3f3f3; border-top: 8px solid #FDCB6E;
+            border-radius: 50%; width: 50px; height: 50px;
+            animation: spin 1s linear infinite; margin: 20px auto;
         }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
@@ -120,18 +120,16 @@
     </div>
 
     <div id="loading-screen" class="hidden">
-        <h2>⏳ Connecting...</h2>
-        <p>Fetching your questions...</p>
+        <h2>⏳ Please Wait...</h2>
+        <div class="loader"></div>
+        <p>Fetching your questions from the cloud.<br>This might take a few seconds!</p>
     </div>
 
     <div id="game-screen" class="hidden">
         <div class="quiz-score">Question: <span id="q-number">1</span> / <span id="q-total">20</span></div>
         <div id="question-text" class="question-text">Question goes here?</div>
-        
         <div id="options-area"></div> 
-        
         <div id="feedback-area" class="hidden"></div>
-
         <button id="next-btn" class="hidden" onclick="nextQuestion()">NEXT QUESTION ➡</button>
     </div>
 
@@ -172,7 +170,6 @@
 
     function logout() { localStorage.clear(); location.reload(); }
 
-    // 🟢 UPDATED: Maths Removed 🟢
     function updateSubjects() {
         const sel = document.getElementById("class-select").value;
         const sub = document.getElementById("subject-select");
@@ -182,23 +179,10 @@
             sub.disabled = false;
             let subjects = [];
 
-            // If Class is 9 OR 10 -> Show Detailed List (NO MATHS)
             if (sel === "9" || sel === "10") {
-                subjects = [
-                    "English",
-                    "Science", 
-                    "History", 
-                    "Political Science", 
-                    "Geography", 
-                    "Economics"
-                ];
-            } 
-            // Else (6, 7, 8) -> Show General List (NO MATHS)
-            else {
-                subjects = [
-                    "Science", 
-                    "Social Science"
-                ];
+                subjects = ["English", "Science", "History", "Political Science", "Geography", "Economics"];
+            } else {
+                subjects = ["Science", "Social Science"];
             }
 
             subjects.forEach(s => {
@@ -230,11 +214,13 @@
         document.getElementById("login-screen").classList.add("hidden");
         document.getElementById("loading-screen").classList.remove("hidden");
 
+        // Send login data silently
         fetch(scriptURL, {
             method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name: name, phone: phone, school: school, studentClass: cls })
-        });
+        }).catch(e => console.log("Login log failed, but continuing..."));
 
+        // Fetch Questions
         const fetchUrl = `${scriptURL}?studentClass=${cls}&subject=${encodeURIComponent(sub)}`;
         
         fetch(fetchUrl)
@@ -245,10 +231,12 @@
                 location.reload();
                 return;
             }
+            // Shuffle
             for (let i = data.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [data[i], data[j]] = [data[j], data[i]];
             }
+            // Take max 20 questions
             currentQuestions = data.slice(0, 20);
             
             document.getElementById("loading-screen").classList.add("hidden");
@@ -280,12 +268,17 @@
         options.forEach(opt => {
             let btn = document.createElement("button");
             btn.className = "option-btn"; 
-            btn.innerText = opt;
-            btn.onclick = () => checkAnswer(btn, opt.trim(), q.correct.trim());
-            area.appendChild(btn);
+            // Handle if an option is blank/undefined to prevent ugly buttons
+            if(opt) {
+                btn.innerText = opt;
+                // 🔴 NEW: Safer checkAnswer call using .toString()
+                btn.onclick = () => checkAnswer(btn, opt, q.correct);
+                area.appendChild(btn);
+            }
         });
     }
 
+    // 🟢 UPDATED: Crash-Proof Answer Check 🟢
     function checkAnswer(selectedBtn, selectedValue, correctValue) {
         let allBtns = document.querySelectorAll(".option-btn");
         allBtns.forEach(btn => btn.disabled = true);
@@ -293,16 +286,25 @@
         const feedbackArea = document.getElementById("feedback-area");
         feedbackArea.classList.remove("hidden");
 
-        if(selectedValue === correctValue) {
+        // Convert both to string and trim to avoid crashes on numbers or empty cells
+        let safeSelected = String(selectedValue).trim().toLowerCase();
+        let safeCorrect = String(correctValue).trim().toLowerCase();
+
+        if(safeSelected === safeCorrect) {
             selectedBtn.classList.add("correct-answer");
             score++;
             feedbackArea.className = "feedback-text feedback-correct";
             feedbackArea.innerText = "✅ Correct! Great job.";
         } else {
             selectedBtn.classList.add("wrong-answer");
+            
+            // Highlight the correct one
             allBtns.forEach(btn => {
-                if(btn.innerText.trim() === correctValue) btn.classList.add("correct-answer");
+                if(String(btn.innerText).trim().toLowerCase() === safeCorrect) {
+                    btn.classList.add("correct-answer");
+                }
             });
+
             feedbackArea.className = "feedback-text feedback-wrong";
             feedbackArea.innerText = "❌ Oops! The correct answer is: " + correctValue;
         }
