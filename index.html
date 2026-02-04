@@ -72,7 +72,6 @@
 
         .result-circle { width: 120px; height: 120px; background: #ffeaa7; border-radius: 50%; border: 4px solid #000; display: flex; justify-content: center; align-items: center; margin: 0 auto 20px auto; font-size: 40px; font-weight: 900; color: #2d3436; }
 
-        /* 🌀 NEW LOADING SPINNER CSS */
         .loader {
             border: 8px solid #f3f3f3; border-top: 8px solid #FDCB6E;
             border-radius: 50%; width: 50px; height: 50px;
@@ -108,7 +107,7 @@
         <label>Class</label>
         <select id="class-select" onchange="updateSubjects()">
             <option value="">-- Pick your level --</option>
-            <option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option>
+            <option value="10">Class 10</option>
         </select>
 
         <label>Subject</label>
@@ -170,20 +169,23 @@
 
     function logout() { localStorage.clear(); location.reload(); }
 
+    // 🟢 SIMPLIFIED SUBJECT LIST (ONLY CLASS 10) 🟢
     function updateSubjects() {
         const sel = document.getElementById("class-select").value;
         const sub = document.getElementById("subject-select");
         sub.innerHTML = '<option value="">-- Pick a subject --</option>';
         
-        if(sel) {
+        if(sel === "10") {
             sub.disabled = false;
-            let subjects = [];
-
-            if (sel === "9" || sel === "10") {
-                subjects = ["English", "Science", "History", "Political Science", "Geography", "Economics"];
-            } else {
-                subjects = ["Science", "Social Science"];
-            }
+            // Removed Maths as requested
+            const subjects = [
+                "English",
+                "Science", 
+                "History", 
+                "Political Science", 
+                "Geography", 
+                "Economics"
+            ];
 
             subjects.forEach(s => {
                 let opt = document.createElement("option"); 
@@ -236,7 +238,6 @@
                 const j = Math.floor(Math.random() * (i + 1));
                 [data[i], data[j]] = [data[j], data[i]];
             }
-            // Take max 20 questions
             currentQuestions = data.slice(0, 20);
             
             document.getElementById("loading-screen").classList.add("hidden");
@@ -268,17 +269,14 @@
         options.forEach(opt => {
             let btn = document.createElement("button");
             btn.className = "option-btn"; 
-            // Handle if an option is blank/undefined to prevent ugly buttons
             if(opt) {
                 btn.innerText = opt;
-                // 🔴 NEW: Safer checkAnswer call using .toString()
                 btn.onclick = () => checkAnswer(btn, opt, q.correct);
                 area.appendChild(btn);
             }
         });
     }
 
-    // 🟢 UPDATED: Crash-Proof Answer Check 🟢
     function checkAnswer(selectedBtn, selectedValue, correctValue) {
         let allBtns = document.querySelectorAll(".option-btn");
         allBtns.forEach(btn => btn.disabled = true);
@@ -286,7 +284,6 @@
         const feedbackArea = document.getElementById("feedback-area");
         feedbackArea.classList.remove("hidden");
 
-        // Convert both to string and trim to avoid crashes on numbers or empty cells
         let safeSelected = String(selectedValue).trim().toLowerCase();
         let safeCorrect = String(correctValue).trim().toLowerCase();
 
@@ -297,14 +294,11 @@
             feedbackArea.innerText = "✅ Correct! Great job.";
         } else {
             selectedBtn.classList.add("wrong-answer");
-            
-            // Highlight the correct one
             allBtns.forEach(btn => {
                 if(String(btn.innerText).trim().toLowerCase() === safeCorrect) {
                     btn.classList.add("correct-answer");
                 }
             });
-
             feedbackArea.className = "feedback-text feedback-wrong";
             feedbackArea.innerText = "❌ Oops! The correct answer is: " + correctValue;
         }
