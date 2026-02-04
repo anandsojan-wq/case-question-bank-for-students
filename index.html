@@ -2,144 +2,205 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta na!me="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CBSE Question Bank</title>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Quiz Party!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        /* --- COMPACT MOBILE THEME --- */
+        /* --- 🎨 MODERN PARTY THEME --- */
         :root {
-            --bg-color: #6C5CE7; --card-bg: #FFFFFF; --text-color: #2D3436;
-            --primary-btn: #FDCB6E; --primary-shadow: #E1B12C; --input-bg: #F0F3F7;
-            --correct-green: #00b894; --wrong-red: #ff7675;
+            --primary: #6C5CE7; 
+            --accent: #00cec9;
+            --btn-color: #ffeaa7;
+            --btn-shadow: #fdcb6e;
+            --text-dark: #2d3436;
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.6);
         }
 
-        * { box-sizing: border-box; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
-            font-family: 'Nunito', sans-serif;
-            background-color: var(--bg-color);
+            font-family: 'Poppins', sans-serif;
             margin: 0; padding: 0;
             height: 100vh; width: 100vw;
-            overflow: hidden; /* ⛔ NO SCROLL */
+            overflow: hidden;
+            background: linear-gradient(135deg, #a29bfe, #74b9ff, #55efc4);
+            background-size: 300% 300%;
+            animation: gradientMove 10s ease infinite;
             display: flex; justify-content: center; align-items: center;
         }
 
-        .container {
-            background: var(--card-bg);
-            width: 100%; height: 100%; /* Full Screen */
-            max-width: 500px; /* Limits width on Desktop */
-            padding: 20px;
-            display: flex; flex-direction: column; justify-content: center; /* Center Vertically */
-            text-align: center;
-            position: relative;
+        /* 🌊 Animated Background */
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
-        /* Responsive Text: Scales with screen height */
+        /* ✨ Floating Particles */
+        .particle {
+            position: absolute;
+            width: 20px; height: 20px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            animation: float 6s infinite ease-in-out;
+            z-index: 0;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-20px) scale(1.2); }
+        }
+
+        /* 📱 Glassmorphism Card */
+        .container {
+            width: 90%; max-width: 400px; height: 90%; 
+            max-height: 800px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 2px solid var(--glass-border);
+            border-radius: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            padding: 25px;
+            display: flex; flex-direction: column; 
+            justify-content: center; text-align: center;
+            position: relative; z-index: 10;
+        }
+
         h2 { 
             font-weight: 900; 
-            font-size: clamp(24px, 4vh, 32px); 
-            color: #2d3436; margin: 0 0 15px 0; 
-            text-transform: uppercase; 
-            line-height: 1.2;
+            font-size: 28px; 
+            background: linear-gradient(45deg, #6c5ce7, #0984e3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0 0 20px 0; text-transform: uppercase; letter-spacing: 1px;
         }
 
-        /* Compact Inputs */
+        /* 🖌️ Modern Inputs */
         input, select {
-            width: 100%; padding: 12px; 
-            background: var(--input-bg);
-            border: 2px solid #dfe6e9; border-radius: 12px;
-            font-size: 16px; font-weight: 700; font-family: 'Nunito', sans-serif;
-            color: #2d3436; margin-bottom: 10px; 
-            outline: none;
+            width: 100%; padding: 14px; 
+            background: #f1f2f6; border: none;
+            border-radius: 15px;
+            font-size: 15px; font-weight: 700; font-family: 'Poppins', sans-serif;
+            color: var(--text-dark); margin-bottom: 12px; 
+            transition: 0.3s;
         }
-        
-        /* Side-by-Side Dropdowns */
+        input:focus, select:focus {
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.2);
+            transform: scale(1.02);
+        }
+
         .row { display: flex; gap: 10px; }
         .row select { width: 50%; }
 
-        /* Big Action Button */
+        /* 🚀 3D Juicy Button */
         button {
-            width: 100%; padding: 15px; 
-            background: var(--primary-btn); color: #2d3436;
-            border: 3px solid #000; border-radius: 12px; 
+            width: 100%; padding: 16px; 
+            background: var(--btn-color); color: var(--text-dark);
+            border: none; border-radius: 15px; 
             font-size: 18px; font-weight: 900;
-            cursor: pointer; box-shadow: 0 4px 0 var(--primary-shadow); 
-            text-transform: uppercase; margin-top: 5px;
+            cursor: pointer; 
+            box-shadow: 0 5px 0 var(--btn-shadow); 
+            text-transform: uppercase; margin-top: 10px;
+            transition: all 0.1s;
         }
-        button:active { box-shadow: 0 0 0 var(--primary-shadow); transform: translateY(4px); }
-        button:disabled { background-color: #bdc3c7; box-shadow: none; border-color: #95a5a6; }
+        button:active { 
+            box-shadow: 0 0 0 var(--btn-shadow); 
+            transform: translateY(5px); 
+        }
+        button:disabled { 
+            background: #dfe6e9; color: #b2bec3; 
+            box-shadow: none; transform: none; 
+        }
 
         .hidden { display: none !important; }
         .footer { 
-            position: absolute; bottom: 10px; left: 0; right: 0; 
-            font-size: 12px; color: #b2bec3; font-weight: 700; 
+            position: absolute; bottom: 15px; left: 0; right: 0; 
+            font-size: 11px; color: #636e72; font-weight: 600; opacity: 0.7;
         }
 
-        /* --- QUIZ SCREEN OPTIMIZATIONS --- */
-        .quiz-score { font-size: 14px; color: #636e72; font-weight: 800; margin-bottom: 10px; text-align: right; }
-        
-        .question-text { 
-            font-size: clamp(18px, 2.5vh, 24px); /* Scales text */
-            font-weight: 800; line-height: 1.3; 
-            margin-bottom: 15px; text-align: left; 
-            min-height: 60px; /* Prevents jumpiness */
-            display: flex; align-items: center;
+        /* 🎮 Game Screen Styles */
+        .quiz-score { 
+            font-size: 13px; font-weight: 800; color: #636e72; 
+            background: #dfe6e9; padding: 5px 12px; border-radius: 20px;
+            display: inline-block; margin-bottom: 15px; align-self: flex-end;
         }
         
-        /* Scrollable Options Area (Only if options are huge) */
+        .question-text { 
+            font-size: 20px; font-weight: 800; line-height: 1.4; 
+            margin-bottom: 20px; text-align: left; color: #2d3436;
+            flex-grow: 0; 
+        }
+
         #options-area {
-            display: flex; flex-direction: column; gap: 8px;
-            flex-grow: 1; /* Fills remaining space */
-            overflow-y: auto; /* Scroll ONLY options if needed */
+            display: flex; flex-direction: column; gap: 10px;
+            overflow-y: auto; padding-bottom: 10px;
+            flex-grow: 1; /* Pushes options to fill space */
         }
 
         .option-btn {
-            background: #fff; border: 2px solid #dfe6e9; 
-            color: #2d3436; padding: 12px;
-            text-align: left; font-size: 16px; margin: 0;
-            box-shadow: 0 3px 0 #b2bec3; 
+            background: #fff; border: 2px solid #f1f2f6; 
+            border-radius: 12px; padding: 14px;
+            text-align: left; font-size: 15px; font-weight: 600;
+            box-shadow: 0 3px 0 #dfe6e9; margin: 0;
+            transition: transform 0.1s;
         }
+        .option-btn:active { transform: scale(0.98); }
 
-        .correct-answer { background: var(--correct-green) !important; color: white !important; border-color: #000 !important; }
-        .wrong-answer { background: var(--wrong-red) !important; color: white !important; border-color: #000 !important; }
+        .correct-answer { background: #00b894 !important; color: white !important; border-color: #00b894 !important; box-shadow: 0 3px 0 #008f72 !important; }
+        .wrong-answer { background: #ff7675 !important; color: white !important; border-color: #ff7675 !important; box-shadow: 0 3px 0 #d63031 !important; }
 
         .feedback-text { 
-            margin-top: 10px; padding: 8px; border-radius: 8px; 
-            font-weight: 800; font-size: 14px; 
+            margin-top: 10px; padding: 12px; border-radius: 12px; 
+            font-weight: 700; font-size: 14px; text-align: center;
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .feedback-correct { background-color: #d1f2eb; color: #006266; border: 2px solid #00b894; }
-        .feedback-wrong { background-color: #fadbd8; color: #c0392b; border: 2px solid #ff7675; }
+        @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-        /* Loader */
+        .feedback-correct { background: #d1f2eb; color: #00b894; }
+        .feedback-wrong { background: #fadbd8; color: #d63031; }
+
+        /* 🌀 Modern Spinner */
         .loader {
-            border: 6px solid #f3f3f3; border-top: 6px solid #FDCB6E;
-            border-radius: 50%; width: 40px; height: 40px;
-            animation: spin 1s linear infinite; margin: 20px auto;
+            width: 48px; height: 48px;
+            border: 5px solid #FFF;
+            border-bottom-color: #6C5CE7;
+            border-radius: 50%;
+            display: inline-block;
+            box-sizing: border-box;
+            animation: rotation 1s linear infinite;
+            margin-bottom: 15px;
         }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
     </style>
 </head>
 <body>
 
+<div class="particle" style="top: 10%; left: 10%; width: 40px; height: 40px; background: rgba(255,255,255,0.2);"></div>
+<div class="particle" style="top: 80%; left: 80%; width: 60px; height: 60px; animation-delay: 1s;"></div>
+<div class="particle" style="top: 40%; left: 20%; width: 30px; height: 30px; animation-delay: 2s;"></div>
+<div class="particle" style="top: 70%; right: 10%; width: 50px; height: 50px; animation-delay: 3s;"></div>
+
 <div class="container">
     
     <div id="login-screen">
-        <h2>CBSE QUESTION BANK</h2>
+        <h2>⚡ Quiz Party</h2>
         
         <div id="welcome-section" class="hidden">
-            <div style="background: #e0f7fa; padding: 10px; border-radius: 10px; border: 2px solid #00cec9; margin-bottom: 15px;">
-                Welcome back, <span style="font-weight:900;" id="display-name">Student</span>
-                <div style="font-size:11px; text-decoration:underline; cursor:pointer; margin-top:4px;" onclick="logout()">Not you? Change User</div>
+            <div style="background: rgba(0, 206, 201, 0.1); padding: 12px; border-radius: 15px; margin-bottom: 20px;">
+                <div style="font-size: 13px; color: #636e72;">Welcome back,</div>
+                <div style="font-size: 20px; font-weight:900; color: #2d3436;" id="display-name">Student</div>
+                <div style="font-size:11px; text-decoration:underline; cursor:pointer; margin-top:5px; color: #0984e3;" onclick="logout()">Change User</div>
             </div>
         </div>
 
         <div id="personal-details">
-            <input type="text" id="student-name" placeholder="Enter Full Name">
-            <input type="tel" id="student-phone" placeholder="Phone Number (10 digits)" maxlength="10">
+            <input type="text" id="student-name" placeholder="Type your name...">
+            <input type="tel" id="student-phone" placeholder="Phone (10 digits)" maxlength="10">
             <input type="text" id="student-school" placeholder="School Name">
         </div>
-
-        <div style="height: 2px; background: #dfe6e9; margin: 15px 0;"></div>
 
         <div class="row">
             <select id="class-select" onchange="updateSubjects()">
@@ -152,13 +213,13 @@
             </select>
         </div>
 
-        <button id="start-btn" onclick="startApp()">START QUIZ ▶</button>
+        <button id="start-btn" onclick="startApp()">Start Quiz 🚀</button>
     </div>
 
     <div id="loading-screen" class="hidden">
-        <h2>⏳ Loading...</h2>
-        <div class="loader"></div>
-        <p style="font-size: 14px; color: #636e72;">Fetching questions...</p>
+        <span class="loader"></span>
+        <h3 style="margin: 0; color: #2d3436;">Connecting...</h3>
+        <p style="font-size: 13px; color: #636e72;">Getting questions ready!</p>
     </div>
 
     <div id="game-screen" class="hidden" style="height: 100%; display: flex; flex-direction: column;">
@@ -168,15 +229,15 @@
         <div id="options-area"></div> 
         
         <div id="feedback-area" class="hidden"></div>
-        <button id="next-btn" class="hidden" onclick="nextQuestion()">NEXT ➡</button>
+        <button id="next-btn" class="hidden" onclick="nextQuestion()">Next Question ➡</button>
     </div>
 
     <div id="result-screen" class="hidden">
-        <h2>🏆 FINISHED!</h2>
-        <div style="font-size: 60px; margin: 20px 0;">🎉</div>
-        <h1 id="final-score" style="font-size: 50px; margin: 0; color: #2d3436;">0%</h1>
-        <p style="color: #636e72; font-weight: 700;">Score: <span id="score-count">0</span> correct</p>
-        <button onclick="location.reload()">PLAY AGAIN 🔄</button>
+        <h2 style="font-size: 24px; color: #2d3436;">Quiz Complete!</h2>
+        <div style="font-size: 70px; margin: 10px 0; animation: bounce 1s infinite;">🏆</div>
+        <h1 id="final-score" style="font-size: 45px; margin: 0; color: #6C5CE7;">0%</h1>
+        <p style="color: #636e72; font-weight: 700; margin-top: 5px;">You got <span id="score-count">0</span> correct!</p>
+        <button onclick="location.reload()" style="background: #00b894; color: white; box-shadow: 0 5px 0 #008f72;">Play Again 🔄</button>
     </div>
 
     <div class="footer">Developed by ICM Educations</div>
@@ -236,13 +297,11 @@
         document.getElementById("login-screen").classList.add("hidden");
         document.getElementById("loading-screen").classList.remove("hidden");
 
-        // Silent Login
         fetch(scriptURL, {
             method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name: name, phone: phone, school: school, studentClass: cls })
         }).catch(e => console.log("Log error"));
 
-        // Fetch Questions
         const fetchUrl = `${scriptURL}?studentClass=${cls}&subject=${encodeURIComponent(sub)}`;
         
         fetch(fetchUrl)
@@ -256,7 +315,6 @@
             currentQuestions = data.slice(0, 20);
             
             document.getElementById("loading-screen").classList.add("hidden");
-            // Important: Use flex to keep game screen full height
             let gameScreen = document.getElementById("game-screen");
             gameScreen.classList.remove("hidden");
             gameScreen.style.display = "flex"; 
@@ -302,7 +360,7 @@
             selectedBtn.classList.add("correct-answer");
             score++;
             feedbackArea.className = "feedback-text feedback-correct";
-            feedbackArea.innerText = "✅ Correct!";
+            feedbackArea.innerText = "✅ Correct! Great job.";
         } else {
             selectedBtn.classList.add("wrong-answer");
             allBtns.forEach(btn => {
@@ -324,7 +382,7 @@
     }
 
     function showResult() {
-        document.getElementById("game-screen").style.display = "none"; // Hard hide
+        document.getElementById("game-screen").style.display = "none";
         document.getElementById("result-screen").classList.remove("hidden");
         document.getElementById("score-count").innerText = score + " / " + currentQuestions.length;
         let percentage = Math.round((score / currentQuestions.length) * 100);
