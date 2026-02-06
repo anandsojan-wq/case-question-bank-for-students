@@ -3,104 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz Party!</title>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>CBSE Question Bank</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
-        /* --- CANDY POP THEME --- */
+        /* --- UNIFIED THEME CSS --- */
         :root {
-            --bg-color: #6C5CE7; --card-bg: #FFFFFF; --text-color: #2D3436;
-            --primary-btn: #FDCB6E; --primary-shadow: #E1B12C; --input-bg: #F0F3F7;
-            --correct-green: #00b894; --wrong-red: #ff7675;
-            --border-radius: 20px;
+            --bg-color: #6c5ce7;
+            --bg-pattern: #a29bfe;
+            --glass-bg: rgba(255, 255, 255, 0.9);
+            --glass-border: rgba(255, 255, 255, 0.8);
+            --text-main: #2d3436;
+            --text-sub: #636e72;
+            --input-bg: rgba(255, 255, 255, 0.6);
+            --btn-yellow: #f9d976;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --success: #00b894;
+            --error: #ff7675;
         }
 
         body {
-            font-family: 'Nunito', sans-serif;
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
             background-color: var(--bg-color);
-            background-image: radial-gradient(#81ECEC 10%, transparent 11%), radial-gradient(#81ECEC 10%, transparent 11%);
-            background-size: 60px 60px;
-            background-position: 0 0, 30px 30px;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            min-height: 100vh; margin: 0; color: var(--text-color); padding: 20px; box-sizing: border-box;
+            background-image: radial-gradient(var(--bg-pattern) 15%, transparent 15%);
+            background-size: 25px 25px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 0;
         }
 
         .container {
-            background: var(--card-bg); padding: 30px; width: 100%; max-width: 450px;
-            border-radius: var(--border-radius); box-shadow: 0 8px 0 rgba(0,0,0,0.15);
-            text-align: center; border: 4px solid #000; position: relative; z-index: 10;
+            position: relative; z-index: 10;
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            width: 90%; max-width: 450px;
+            border-radius: 24px; padding: 35px 30px;
+            text-align: center;
+            box-shadow: 0 15px 35px var(--shadow);
+            border: 2px solid var(--glass-border);
         }
 
-        h2 { font-weight: 900; font-size: 28px; color: #2d3436; margin: 0 0 10px 0; text-transform: uppercase; }
-        label { display: block; text-align: left; margin-bottom: 8px; font-weight: 800; font-size: 14px; color: #636e72; padding-left: 5px; text-transform: uppercase; }
+        h2 { font-weight: 900; color: var(--text-main); margin: 0 0 10px 0; font-size: 24px; text-transform: uppercase; }
+        label { display: block; text-align: left; margin-bottom: 5px; font-weight: 800; font-size: 11px; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1px; }
 
         select {
-            width: 100%; padding: 15px; background: var(--input-bg);
-            border: 3px solid #dfe6e9; border-radius: 15px;
-            font-size: 16px; font-family: 'Nunito', sans-serif; font-weight: 700;
-            color: #2d3436; margin-bottom: 20px; box-sizing: border-box; outline: none; transition: all 0.2s;
+            width: 100%; padding: 16px;
+            border: 2px solid rgba(0,0,0,0.1); border-radius: 14px;
+            background: white;
+            box-sizing: border-box; outline: none;
+            font-size: 15px; font-family: 'Poppins', sans-serif; font-weight: 600; color: var(--text-main);
+            margin-bottom: 20px; cursor: pointer;
+            -webkit-appearance: none; appearance: none;
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%232d3436%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat; background-position: right 15px top 50%; background-size: 12px auto;
         }
-        
+
         button {
-            width: 100%; padding: 15px; background: var(--primary-btn); color: #2d3436;
-            border: 3px solid #000; border-radius: 15px; font-size: 20px; font-weight: 900;
-            cursor: pointer; box-shadow: 0 6px 0 var(--primary-shadow); 
-            text-transform: uppercase; margin-top: 10px; transition: all 0.1s;
+            width: 100%; padding: 16px;
+            background: var(--btn-yellow);
+            border: 3px solid var(--text-main); border-radius: 16px;
+            font-weight: 800; font-size: 16px; text-transform: uppercase;
+            cursor: pointer; box-shadow: 0 6px 0 var(--text-main);
+            transition: all 0.1s; color: var(--text-main);
+            margin-top: 10px;
         }
-        button:active { box-shadow: 0 0 0 var(--primary-shadow); transform: translateY(6px); }
+        button:active { transform: translateY(6px); box-shadow: 0 0 0 var(--text-main); }
         button:disabled { background-color: #bdc3c7; box-shadow: none; transform: translateY(6px); border-color: #95a5a6; }
 
         .hidden { display: none !important; }
-        .footer { margin-top: 30px; color: white; font-weight: 700; font-size: 14px; text-shadow: 1px 1px 0px #000; opacity: 0.9; }
 
-        /* TIMER STYLES */
+        /* Timer Styles (Unified) */
         .timer-container {
-            background: linear-gradient(135deg, #A29BFE 0%, #6C5CE7 100%);
-            border: 4px solid #000;
-            border-radius: 20px;
-            padding: 15px 20px;
-            margin-bottom: 25px;
-            box-shadow: 0 6px 0 rgba(0,0,0,0.2);
-            position: relative;
-            overflow: hidden;
+            background: var(--text-main);
+            border-radius: 16px; padding: 15px; margin-bottom: 25px;
+            color: white; text-align: center;
         }
+        .timer-display { font-size: 32px; font-weight: 900; display: flex; justify-content: center; align-items: center; gap: 10px; }
+        .timer-bar { height: 8px; background: rgba(255,255,255,0.2); border-radius: 10px; margin-top: 10px; overflow: hidden; }
+        .timer-fill { height: 100%; background: var(--btn-yellow); width: 100%; transition: width 1s linear; }
 
-        .timer-display {
-            font-size: 32px; font-weight: 900; color: #fff;
-            text-shadow: 2px 2px 0px rgba(0,0,0,0.3);
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-        }
-
-        .timer-icon { font-size: 28px; animation: pulse 2s ease-in-out infinite; }
-        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
-
-        .timer-bar { height: 8px; background: rgba(255,255,255,0.3); border-radius: 10px; margin-top: 12px; overflow: hidden; position: relative; }
-        .timer-fill { height: 100%; background: linear-gradient(90deg, #FDCB6E 0%, #FAB1A0 100%); border-radius: 10px; transition: width 1s linear; box-shadow: 0 0 10px rgba(253, 203, 110, 0.5); }
-        .timer-warning { animation: warning-flash 1s ease-in-out infinite; }
-        @keyframes warning-flash { 0%, 100% { background: linear-gradient(135deg, #A29BFE 0%, #6C5CE7 100%); } 50% { background: linear-gradient(135deg, #ff7675 0%, #d63031 100%); } }
-        .timer-text { font-size: 12px; color: rgba(255,255,255,0.9); margin-top: 8px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
-
-        /* QUIZ STYLES */
-        .quiz-score { font-size: 14px; color: #636e72; font-weight: 800; margin-bottom: 20px; text-align: right; }
-        .question-text { font-size: 22px; font-weight: 800; line-height: 1.4; margin-bottom: 25px; text-align: left; }
+        /* Quiz Styles */
+        .question-text { font-size: 18px; font-weight: 700; line-height: 1.4; margin-bottom: 25px; text-align: left; color: var(--text-main); }
         
         .option-btn {
-            background: #fff; border: 3px solid #dfe6e9; color: #2d3436;
-            margin-bottom: 15px; text-align: left; font-size: 18px;
-            box-shadow: 0 4px 0 #b2bec3; 
+            background: white; border: 2px solid rgba(0,0,0,0.1); color: var(--text-main);
+            margin-bottom: 12px; text-align: left; font-size: 15px; font-weight: 600;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.05); border-radius: 12px; padding: 14px;
         }
-        .option-btn:hover { background: #f1f2f6; }
+        .option-btn:hover { background: #f8f9fa; }
         
-        .correct-answer { background: var(--correct-green) !important; border-color: #000 !important; color: white !important; box-shadow: 0 4px 0 #006266 !important; }
-        .wrong-answer { background: var(--wrong-red) !important; border-color: #000 !important; color: white !important; box-shadow: 0 4px 0 #c0392b !important; }
+        .correct-answer { background: #d1f2eb !important; border-color: var(--success) !important; color: #006266 !important; }
+        .wrong-answer { background: #fadbd8 !important; border-color: var(--error) !important; color: #c0392b !important; }
 
-        .feedback-text { margin-top: 15px; padding: 10px; border-radius: 10px; font-weight: 800; font-size: 16px; }
-        .feedback-correct { background-color: #d1f2eb; color: #006266; border: 2px solid #00b894; }
-        .feedback-wrong { background-color: #fadbd8; color: #c0392b; border: 2px solid #ff7675; }
+        .feedback-text { margin-top: 15px; padding: 10px; border-radius: 10px; font-weight: 800; font-size: 14px; }
+        .feedback-correct { background-color: #d1f2eb; color: var(--success); }
+        .feedback-wrong { background-color: #fadbd8; color: var(--error); }
 
-        .result-circle { width: 120px; height: 120px; background: #ffeaa7; border-radius: 50%; border: 4px solid #000; display: flex; justify-content: center; align-items: center; margin: 0 auto 20px auto; font-size: 40px; font-weight: 900; color: #2d3436; }
+        .result-circle { 
+            width: 100px; height: 100px; background: var(--btn-yellow); 
+            border-radius: 50%; border: 3px solid var(--text-main); 
+            display: flex; justify-content: center; align-items: center; 
+            margin: 0 auto 20px auto; font-size: 30px; font-weight: 900; color: var(--text-main); 
+        }
 
-        .loader { border: 8px solid #f3f3f3; border-top: 8px solid #FDCB6E; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 20px auto; }
+        .loader { border: 5px solid #f3f3f3; border-top: 5px solid var(--btn-yellow); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 20px auto; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        .back-link {
+            display: block; margin-top: 20px; font-size: 12px; color: var(--text-sub); 
+            text-decoration: underline; cursor: pointer; font-weight: 600;
+        }
     </style>
 </head>
 <body>
@@ -108,9 +123,10 @@
 <div class="container">
     
     <div id="login-screen">
-        <h2>🚀 CBSE QUESTION BANK</h2>
+        <div style="font-size: 40px; margin-bottom: 5px;">🚀</div>
+        <h2>CBSE Question Bank</h2>
         
-        <p style="color: #636e72; margin-bottom: 20px; font-weight: 700;">Select your subject to begin practice.</p>
+        <p style="margin-bottom: 25px;">Select your subject to begin practice.</p>
 
         <label>Class</label>
         <select id="class-select" onchange="updateSubjects()">
@@ -124,6 +140,7 @@
         </select>
 
         <button id="start-btn" onclick="startApp()">LET'S GO! ▶</button>
+        <a href="index.html" class="back-link">← Back to Dashboard</a>
     </div>
 
     <div id="loading-screen" class="hidden">
@@ -141,10 +158,12 @@
             <div class="timer-bar">
                 <div class="timer-fill" id="timer-fill"></div>
             </div>
-            <div class="timer-text">Time Remaining</div>
         </div>
 
-        <div class="quiz-score">Question: <span id="q-number">1</span> / <span id="q-total">20</span></div>
+        <div style="text-align: right; font-size: 12px; font-weight: 800; color: var(--text-sub); margin-bottom: 10px;">
+            Question: <span id="q-number">1</span> / <span id="q-total">20</span>
+        </div>
+        
         <div id="question-text" class="question-text">Question goes here?</div>
         <div id="options-area"></div> 
         <div id="feedback-area" class="hidden"></div>
@@ -154,34 +173,29 @@
     <div id="result-screen" class="hidden">
         <h2>🏆 QUIZ COMPLETE!</h2>
         <div class="result-circle" id="final-score">0%</div>
-        <p>You got <span id="score-count">0</span> correct answers.</p>
+        <p style="font-weight: 700; color: var(--text-main);">You got <span id="score-count">0</span> correct answers.</p>
         <button onclick="location.reload()">PLAY AGAIN 🔄</button>
+        <a href="index.html" class="back-link">← Back to Dashboard</a>
     </div>
 
 </div>
 
-<div class="footer">Developed by ICM Educations</div>
-
 <script>
-    // 🔴 YOUR GOOGLE SCRIPT URL 🔴
+    // 🔴 YOUR GOOGLE SCRIPT URL (KEPT INTACT) 🔴
     const scriptURL = "https://script.google.com/macros/s/AKfycbwXeFBp7ZOQ73n-RyxR2DeLTn_DbVVmEN-o62VRplViJcA9peUWie0o5PxuuN3JWwj2xQ/exec"; 
 
-    // --- VARIABLES ---
+    // --- VARIABLES (KEPT INTACT) ---
     let currentQuestions = [];
     let currentQuestionIndex = 0;
     let score = 0;
-    
-    // TIMER VARIABLES
-    let timeRemaining = 300; // 5 minutes in seconds
+    let timeRemaining = 300; 
     let timerInterval = null;
     let totalTime = 300;
     
-    // --- ON LOAD ---
     window.onload = function() {
         document.getElementById("class-select").value = "";
     };
 
-    // 🟢 SIMPLIFIED SUBJECT LIST (ONLY CLASS 10) 🟢
     function updateSubjects() {
         const sel = document.getElementById("class-select").value;
         const sub = document.getElementById("subject-select");
@@ -189,36 +203,19 @@
         
         if(sel === "10") {
             sub.disabled = false;
-            const subjects = [
-                "English",
-                "Science", 
-                "History", 
-                "Political Science", 
-                "Geography", 
-                "Economics"
-            ];
-
+            const subjects = ["English", "Science", "History", "Political Science", "Geography", "Economics"];
             subjects.forEach(s => {
                 let opt = document.createElement("option"); 
-                opt.value = s; 
-                opt.innerText = s; 
-                sub.appendChild(opt);
+                opt.value = s; opt.innerText = s; sub.appendChild(opt);
             });
-        } else { 
-            sub.disabled = true; 
-        }
+        } else { sub.disabled = true; }
     }
 
-    // --- TIMER FUNCTIONS ---
     function startTimer() {
         timerInterval = setInterval(() => {
             timeRemaining--;
             updateTimerDisplay();
-            
-            if(timeRemaining <= 0) {
-                clearInterval(timerInterval);
-                timeUp();
-            }
+            if(timeRemaining <= 0) { clearInterval(timerInterval); timeUp(); }
         }, 1000);
     }
 
@@ -226,32 +223,16 @@
         const minutes = Math.floor(timeRemaining / 60);
         const seconds = timeRemaining % 60;
         const display = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-        
         document.getElementById('timer-display').innerText = display;
-        
         const percentage = (timeRemaining / totalTime) * 100;
         document.getElementById('timer-fill').style.width = percentage + '%';
-        
-        const timerContainer = document.getElementById('timer-container');
-        if(timeRemaining <= 60 && timeRemaining > 0) {
-            timerContainer.classList.add('timer-warning');
-        } else {
-            timerContainer.classList.remove('timer-warning');
-        }
     }
 
-    function timeUp() {
-        alert("⏰ Time's up! The quiz will now end.");
-        showResult();
-    }
+    function timeUp() { alert("⏰ Time's up!"); showResult(); }
 
-    // --- START APP & FETCH QUESTIONS ---
     function startApp() {
-        // Automatically grabbing name from Dashboard login if available
         let name = localStorage.getItem("cbse_student_name") || "Guest Student";
-        let phone = "0000000000"; // Dummy data since form is removed
-        let school = "Not Specified"; // Dummy data since form is removed
-        
+        let phone = "0000000000"; let school = "Not Specified";
         let cls = document.getElementById("class-select").value;
         let sub = document.getElementById("subject-select").value;
 
@@ -260,58 +241,36 @@
         document.getElementById("login-screen").classList.add("hidden");
         document.getElementById("loading-screen").classList.remove("hidden");
 
-        // Send login data silently to keep your sheet logic working
         fetch(scriptURL, {
             method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name: name, phone: phone, school: school, studentClass: cls })
-        }).catch(e => console.log("Login log failed, but continuing..."));
+        }).catch(e => console.log("Login log failed"));
 
-        // Fetch Questions
         const fetchUrl = `${scriptURL}?studentClass=${cls}&subject=${encodeURIComponent(sub)}`;
         
-        fetch(fetchUrl)
-        .then(res => res.json())
-        .then(data => {
-            if(data.length === 0) {
-                alert("⚠️ No questions found for " + sub + "! Check your Google Sheet spelling.");
-                location.reload();
-                return;
-            }
-            // Shuffle
+        fetch(fetchUrl).then(res => res.json()).then(data => {
+            if(data.length === 0) { alert("⚠️ No questions found!"); location.reload(); return; }
             for (let i = data.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [data[i], data[j]] = [data[j], data[i]];
             }
             currentQuestions = data.slice(0, 20);
-            
             document.getElementById("loading-screen").classList.add("hidden");
             document.getElementById("game-screen").classList.remove("hidden");
-            
-            startTimer();
-            loadQuestion();
-        })
-        .catch(err => {
-            console.error(err);
-            alert("Error fetching questions! Check your URL or Internet.");
-            location.reload();
-        });
+            startTimer(); loadQuestion();
+        }).catch(err => { alert("Error fetching questions!"); location.reload(); });
     }
 
-    // --- QUIZ GAME LOGIC ---
     function loadQuestion() {
         let q = currentQuestions[currentQuestionIndex];
-        
         document.getElementById("q-number").innerText = currentQuestionIndex + 1;
         document.getElementById("q-total").innerText = currentQuestions.length;
         document.getElementById("question-text").innerText = q.q;
         document.getElementById("next-btn").classList.add("hidden"); 
         document.getElementById("feedback-area").classList.add("hidden");
-
         const area = document.getElementById("options-area");
         area.innerHTML = ""; 
-        
         let options = [q.a, q.b, q.c, q.d];
-        
         options.forEach(opt => {
             let btn = document.createElement("button");
             btn.className = "option-btn"; 
@@ -326,7 +285,6 @@
     function checkAnswer(selectedBtn, selectedValue, correctValue) {
         let allBtns = document.querySelectorAll(".option-btn");
         allBtns.forEach(btn => btn.disabled = true);
-
         const feedbackArea = document.getElementById("feedback-area");
         feedbackArea.classList.remove("hidden");
 
@@ -334,31 +292,22 @@
         let safeCorrect = String(correctValue).trim().toLowerCase();
 
         if(safeSelected === safeCorrect) {
-            selectedBtn.classList.add("correct-answer");
-            score++;
+            selectedBtn.classList.add("correct-answer"); score++;
             feedbackArea.className = "feedback-text feedback-correct";
-            feedbackArea.innerText = "✅ Correct! Great job.";
+            feedbackArea.innerText = "✅ Correct!";
         } else {
             selectedBtn.classList.add("wrong-answer");
-            allBtns.forEach(btn => {
-                if(String(btn.innerText).trim().toLowerCase() === safeCorrect) {
-                    btn.classList.add("correct-answer");
-                }
-            });
+            allBtns.forEach(btn => { if(String(btn.innerText).trim().toLowerCase() === safeCorrect) btn.classList.add("correct-answer"); });
             feedbackArea.className = "feedback-text feedback-wrong";
-            feedbackArea.innerText = "❌ Oops! The correct answer is: " + correctValue;
+            feedbackArea.innerText = "❌ Correct: " + correctValue;
         }
         document.getElementById("next-btn").classList.remove("hidden");
     }
 
     function nextQuestion() {
         currentQuestionIndex++;
-        if(currentQuestionIndex < currentQuestions.length) {
-            loadQuestion();
-        } else {
-            clearInterval(timerInterval);
-            showResult();
-        }
+        if(currentQuestionIndex < currentQuestions.length) loadQuestion();
+        else showResult();
     }
 
     function showResult() {
