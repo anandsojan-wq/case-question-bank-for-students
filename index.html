@@ -33,7 +33,7 @@
         h2 { font-weight: 900; font-size: 28px; color: #2d3436; margin: 0 0 10px 0; text-transform: uppercase; }
         label { display: block; text-align: left; margin-bottom: 8px; font-weight: 800; font-size: 14px; color: #636e72; padding-left: 5px; text-transform: uppercase; }
 
-        input, select {
+        select {
             width: 100%; padding: 15px; background: var(--input-bg);
             border: 3px solid #dfe6e9; border-radius: 15px;
             font-size: 16px; font-family: 'Nunito', sans-serif; font-weight: 700;
@@ -65,60 +65,19 @@
         }
 
         .timer-display {
-            font-size: 32px;
-            font-weight: 900;
-            color: #fff;
+            font-size: 32px; font-weight: 900; color: #fff;
             text-shadow: 2px 2px 0px rgba(0,0,0,0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
         }
 
-        .timer-icon {
-            font-size: 28px;
-            animation: pulse 2s ease-in-out infinite;
-        }
+        .timer-icon { font-size: 28px; animation: pulse 2s ease-in-out infinite; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
 
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-
-        .timer-bar {
-            height: 8px;
-            background: rgba(255,255,255,0.3);
-            border-radius: 10px;
-            margin-top: 12px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .timer-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #FDCB6E 0%, #FAB1A0 100%);
-            border-radius: 10px;
-            transition: width 1s linear;
-            box-shadow: 0 0 10px rgba(253, 203, 110, 0.5);
-        }
-
-        .timer-warning {
-            animation: warning-flash 1s ease-in-out infinite;
-        }
-
-        @keyframes warning-flash {
-            0%, 100% { background: linear-gradient(135deg, #A29BFE 0%, #6C5CE7 100%); }
-            50% { background: linear-gradient(135deg, #ff7675 0%, #d63031 100%); }
-        }
-
-        .timer-text {
-            font-size: 12px;
-            color: rgba(255,255,255,0.9);
-            margin-top: 8px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+        .timer-bar { height: 8px; background: rgba(255,255,255,0.3); border-radius: 10px; margin-top: 12px; overflow: hidden; position: relative; }
+        .timer-fill { height: 100%; background: linear-gradient(90deg, #FDCB6E 0%, #FAB1A0 100%); border-radius: 10px; transition: width 1s linear; box-shadow: 0 0 10px rgba(253, 203, 110, 0.5); }
+        .timer-warning { animation: warning-flash 1s ease-in-out infinite; }
+        @keyframes warning-flash { 0%, 100% { background: linear-gradient(135deg, #A29BFE 0%, #6C5CE7 100%); } 50% { background: linear-gradient(135deg, #ff7675 0%, #d63031 100%); } }
+        .timer-text { font-size: 12px; color: rgba(255,255,255,0.9); margin-top: 8px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
 
         /* QUIZ STYLES */
         .quiz-score { font-size: 14px; color: #636e72; font-weight: 800; margin-bottom: 20px; text-align: right; }
@@ -140,11 +99,7 @@
 
         .result-circle { width: 120px; height: 120px; background: #ffeaa7; border-radius: 50%; border: 4px solid #000; display: flex; justify-content: center; align-items: center; margin: 0 auto 20px auto; font-size: 40px; font-weight: 900; color: #2d3436; }
 
-        .loader {
-            border: 8px solid #f3f3f3; border-top: 8px solid #FDCB6E;
-            border-radius: 50%; width: 50px; height: 50px;
-            animation: spin 1s linear infinite; margin: 20px auto;
-        }
+        .loader { border: 8px solid #f3f3f3; border-top: 8px solid #FDCB6E; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 20px auto; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
@@ -155,22 +110,7 @@
     <div id="login-screen">
         <h2>🚀 CBSE QUESTION BANK</h2>
         
-        <div id="welcome-section" class="hidden">
-            <div style="background: #e0f7fa; padding: 15px; border-radius: 15px; border: 3px solid #00cec9; margin-bottom: 20px;">
-                Welcome back,<br><span style="font-size: 22px; font-weight:900;">👋 <span id="display-name">Student</span></span>
-                <span style="display:block; margin-top:5px; font-size:12px; text-decoration:underline; cursor:pointer;" onclick="logout()">(Not you? Change User)</span>
-            </div>
-        </div>
-
-        <div id="personal-details">
-            <label>Full Name</label> <input type="text" id="student-name" placeholder="Your Name">
-            <label>Phone Number</label> <input type="tel" id="student-phone" placeholder="9876543210" maxlength="10">
-            <label>School Name</label> <input type="text" id="student-school" placeholder="Your School Name">
-        </div>
-
-        <div style="border-top: 3px dashed #dfe6e9; margin: 20px 0; position: relative;">
-            <span style="background: #fff; padding: 0 10px; color: #b2bec3; font-weight: 800; font-size: 12px; position: absolute; top: -10px; left: 50%; transform: translateX(-50%);">CHOOSE YOUR QUIZ</span>
-        </div>
+        <p style="color: #636e72; margin-bottom: 20px; font-weight: 700;">Select your subject to begin practice.</p>
 
         <label>Class</label>
         <select id="class-select" onchange="updateSubjects()">
@@ -193,7 +133,6 @@
     </div>
 
     <div id="game-screen" class="hidden">
-        <!-- TIMER DISPLAY -->
         <div class="timer-container" id="timer-container">
             <div class="timer-display">
                 <span class="timer-icon">⏱️</span>
@@ -240,19 +179,7 @@
     // --- ON LOAD ---
     window.onload = function() {
         document.getElementById("class-select").value = "";
-        
-        if(localStorage.getItem("studentName")) {
-            document.getElementById("personal-details").classList.add("hidden");
-            document.getElementById("welcome-section").classList.remove("hidden");
-            document.getElementById("display-name").innerText = localStorage.getItem("studentName");
-        }
-        
-        document.getElementById('student-phone').addEventListener('input', function (e) {
-            this.value = this.value.replace(/[^0-9]/g, '');
-        });
     };
-
-    function logout() { localStorage.clear(); location.reload(); }
 
     // 🟢 SIMPLIFIED SUBJECT LIST (ONLY CLASS 10) 🟢
     function updateSubjects() {
@@ -262,7 +189,6 @@
         
         if(sel === "10") {
             sub.disabled = false;
-            // Removed Maths as requested
             const subjects = [
                 "English",
                 "Science", 
@@ -303,11 +229,9 @@
         
         document.getElementById('timer-display').innerText = display;
         
-        // Update progress bar
         const percentage = (timeRemaining / totalTime) * 100;
         document.getElementById('timer-fill').style.width = percentage + '%';
         
-        // Warning animation when less than 1 minute
         const timerContainer = document.getElementById('timer-container');
         if(timeRemaining <= 60 && timeRemaining > 0) {
             timerContainer.classList.add('timer-warning');
@@ -323,23 +247,20 @@
 
     // --- START APP & FETCH QUESTIONS ---
     function startApp() {
-        let name = localStorage.getItem("studentName") || document.getElementById("student-name").value.trim();
-        let phone = localStorage.getItem("studentPhone") || document.getElementById("student-phone").value.trim();
-        let school = localStorage.getItem("studentSchool") || document.getElementById("student-school").value.trim();
+        // Automatically grabbing name from Dashboard login if available
+        let name = localStorage.getItem("cbse_student_name") || "Guest Student";
+        let phone = "0000000000"; // Dummy data since form is removed
+        let school = "Not Specified"; // Dummy data since form is removed
+        
         let cls = document.getElementById("class-select").value;
         let sub = document.getElementById("subject-select").value;
 
-        if(!name || !phone || !school || !cls || !sub) { alert("⚠️ Please fill all details!"); return; }
-        if(phone.length !== 10) { alert("⚠️ Phone must be 10 digits!"); return; }
-
-        localStorage.setItem("studentName", name);
-        localStorage.setItem("studentPhone", phone);
-        localStorage.setItem("studentSchool", school);
+        if(!cls || !sub) { alert("⚠️ Please pick a Class and Subject!"); return; }
 
         document.getElementById("login-screen").classList.add("hidden");
         document.getElementById("loading-screen").classList.remove("hidden");
 
-        // Send login data silently
+        // Send login data silently to keep your sheet logic working
         fetch(scriptURL, {
             method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name: name, phone: phone, school: school, studentClass: cls })
@@ -366,9 +287,7 @@
             document.getElementById("loading-screen").classList.add("hidden");
             document.getElementById("game-screen").classList.remove("hidden");
             
-            // START THE TIMER
             startTimer();
-            
             loadQuestion();
         })
         .catch(err => {
@@ -437,13 +356,13 @@
         if(currentQuestionIndex < currentQuestions.length) {
             loadQuestion();
         } else {
-            clearInterval(timerInterval); // Stop timer when quiz ends
+            clearInterval(timerInterval);
             showResult();
         }
     }
 
     function showResult() {
-        clearInterval(timerInterval); // Ensure timer is stopped
+        clearInterval(timerInterval);
         document.getElementById("game-screen").classList.add("hidden");
         document.getElementById("result-screen").classList.remove("hidden");
         document.getElementById("score-count").innerText = score + " / " + currentQuestions.length;
