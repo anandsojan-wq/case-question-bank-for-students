@@ -203,7 +203,8 @@
         
         if(sel === "10") {
             sub.disabled = false;
-            const subjects = ["English", "Science", "History", "Political Science", "Geography", "Economics"];
+            // ✅ ACTION TAKEN: "English" has been removed from this list
+            const subjects = ["Science", "History", "Political Science", "Geography", "Economics"];
             subjects.forEach(s => {
                 let opt = document.createElement("option"); 
                 opt.value = s; opt.innerText = s; sub.appendChild(opt);
